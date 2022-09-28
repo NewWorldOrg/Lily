@@ -1,11 +1,14 @@
 pipeline {
-  agent any
+  agent {
+    docker {
+      image 'composer:2.4.1'
+    }
+
+  }
   stages {
-    stage('test') {
+    stage('composer install') {
       steps {
-        sh 'cat /etc/os-release'
-        sh 'apt-get install -y libpng-dev libjpeg-dev libxrender1 libxext6 libfontconfig1'
-        sh 'apt-get install php8.1'
+        sh 'composer install --no-scripts --no-autoloader --ignore-platform-reqs'
       }
     }
 
