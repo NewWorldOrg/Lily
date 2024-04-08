@@ -104,7 +104,7 @@ class DiscordBotCommandSystem
                 $args->getDrugName()
             );
 
-            $user = $this->userRepository->getUserByUserId(new UserId((int)$message->user->id));
+            $user = $this->userRepository->getUserByUserId(new UserId((int)$message->author->id));
 
             $medicationHistory = $this->medicationHistoryRepository->create(
                 $user->getId(),

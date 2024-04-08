@@ -20,7 +20,7 @@ use stdClass;
 class DiscordBotClient
 {
     public function __construct(
-        private DiscordBotCommandSystem $discordBotCommandSystem,
+        private readonly DiscordBotCommandSystem $discordBotCommandSystem,
     ) {
     }
 
@@ -136,8 +136,8 @@ class DiscordBotClient
         $bot = $this->discord->user;
 
         if (
-            $message->author->user->id === $bot->id
-            || $message->user->bot
+            $message->author->id === $bot->id
+            || $message->author->bot
         ) {
             return false;
         }

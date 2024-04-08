@@ -15,18 +15,18 @@ class MedicationHistoryHelper
 {
     private string $title = 'のんだ';
 
-    public function __construct(private Discord $discord, private Message $message)
+    public function __construct(private readonly Discord $discord, private readonly Message $message)
     {
     }
 
     public function toMedicationHistoryCreatedEmbed(MedicationHistory $medicationHistory, Drug $drug): Embed
     {
-        $userAvatar = $this->message->user->getAvatarAttribute('png');
+        $userAvatar = $this->message->author->getAvatarAttribute('png');
         $botAvatar = $this->discord->user->getAvatarAttribute('png');
         $embed = new Embed($this->discord);
         $embed->setTitle($this->title);
         $embed->setDescription(
-            '<@'. $this->message->user->id . '>' . ' took '
+            '<@'. $this->message->author->id . '>' . ' took '
             . $drug->getName()->getRawValue()
             . ' '
             . $medicationHistory->getAmount()->toFloat()
@@ -34,7 +34,7 @@ class MedicationHistoryHelper
             . $medicationHistory->getCreatedAt()->getDetail()
         );
         $embed->setColor('#eac645');
-        $embed->setAuthor($this->message->user->username, $userAvatar);
+        $embed->setAuthor($this->message->author->username, $userAvatar);
         $embed->setThumbnail($botAvatar);
         $embed->setFooter('NewWorldMilitaryAdviser');
 
