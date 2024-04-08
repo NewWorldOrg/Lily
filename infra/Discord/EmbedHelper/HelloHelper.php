@@ -11,7 +11,7 @@ class HelloHelper
 {
     private string $title = 'Hello';
 
-    public function __construct(private Discord $discord)
+    public function __construct(private readonly Discord $discord)
     {
     }
 
