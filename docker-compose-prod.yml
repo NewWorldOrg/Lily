@@ -48,8 +48,11 @@ services:
       - node-modules:/code/node_modules
     labels:
       - "traefik.enable=false"
+
 networks:
+  default: {}
   docker_default:
+    external: true
     name: docker_default
 
 volumes:
