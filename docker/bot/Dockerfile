@@ -1,5 +1,5 @@
 ## composer
-FROM composer:2.2.7 AS composer-cache
+FROM composer:2.7.2 AS composer-cache
 WORKDIR /code
 # copy only composer files for caching
 COPY composer.json composer.lock /code/
@@ -7,9 +7,9 @@ COPY composer.json composer.lock /code/
 # install deps(without generating autoloader)
 RUN composer install --no-scripts --no-autoloader --ignore-platform-reqs
 
-FROM php:8.2
+FROM php:8.3
 
-COPY --from=composer:2.1 /usr/bin/composer /usr/bin/composer
+COPY --from=composer-cache /usr/bin/composer /usr/bin/composer
 
 WORKDIR /code
 
@@ -26,7 +26,8 @@ RUN apt update && \
     libicu-dev \
     unzip \
     zlib1g-dev \
-    libonig-dev
+    libonig-dev \
+    default-mysql-client
 
 RUN docker-php-ext-install bcmath intl pdo_mysql opcache bcmath
 
