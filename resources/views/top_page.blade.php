@@ -1,3 +1,3 @@
-@extends('layouts.base', ['activePage' => '無題', 'pageTitle' => 'Welcome to NewWorld'])
+@extends('vendor.adminlte.page')
 @section('content')
 @endsection

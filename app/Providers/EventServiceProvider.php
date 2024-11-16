@@ -27,14 +27,5 @@ class EventServiceProvider extends ServiceProvider
     public function boot()
     {
         parent::boot();
-        if ($this->app->environment("local")) {
-            \DB::listen(
-                function ($query) {
-                    \Log::info($query->sql . PHP_EOL);
-                    \Log::info(json_encode($query->bindings) . PHP_EOL);
-                    \Log::info("time(ms):{$query->time}" . PHP_EOL);
-                }
-            );
-        }
     }
 }

@@ -1,4 +1,4 @@
-@extends('layouts.base', ['activePage' => 'Drug'])
+@extends('vendor.adminlte.page')
 
 @section('content-header')
     <div>

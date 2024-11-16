@@ -32,6 +32,16 @@ class AdminUser implements Authenticatable
         $this->adminUser = $adminUser;
     }
 
+    /**
+     * NOTE: admin-lteがnameを呼ぶので対処
+     */
+    public function __get(string $name)
+    {
+        if ($name = 'name') {
+            return $this->getAdminUser()->getName()->getRawValue();
+        }
+    }
+
     public function getAuthIdentifier(): int
     {
         return $this->adminUser->getId()->getRawValue();
