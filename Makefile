@@ -1,17 +1,22 @@
 APP_CONTAINER_ID = `docker compose ps -q app`
 
-init:
+init_local:
 	@cp .env.example .env
+	@cp docker-compose-local.yml compose.yml
+
+init_prod:
+	@cp .env.example .env
+	@cp docker-compose-prod.yml compose.yml
 
 init_mutagen:
 	@curl -L https://github.com/mutagen-io/mutagen/releases/download/v0.16.2/mutagen_linux_amd64_v0.16.2.tar.gz | sudo tar -zxf - -C /usr/local/bin
 	@curl -L https://github.com/mutagen-io/mutagen-compose/releases/download/v0.16.2/mutagen-compose_linux_amd64_v0.16.2.tar.gz | sudo tar -zxf - -C /usr/local/bin
 
 docker_build:
-	@docker compose build
+	@docker compose build --no-cache
 
 composer_install:
-	@docker compose exec app composer install
+	@docker compose exec app composer install --ignore-platform-reqs
 
 cache_clear:
 	@docker compose exec app php artisan cache:clear

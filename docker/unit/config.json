@@ -1,0 +1,42 @@
+{
+    "settings": {
+        "http": {
+            "header_read_timeout": 60,
+            "body_read_timeout": 60,
+            "send_timeout": 60,
+            "idle_timeout": 180,
+            "max_body_size": 2147483648
+        }
+    },
+
+    "listeners": {
+        "*:80": {
+            "pass": "routes"
+        }
+    },
+
+    "routes": [
+        {
+            "match": {
+                "uri": "!/index.php"
+            },
+            "action": {
+                "share": "/code/public$uri",
+                "fallback": {
+                    "pass": "applications/laravel"
+                },
+                "response_headers": {
+                    "X-Frame-Options": "SAMEORIGIN"
+                }
+            }
+        }
+    ],
+
+    "applications": {
+        "laravel": {
+            "type": "php",
+            "root": "/code/public/",
+            "script": "index.php"
+        }
+    }
+}

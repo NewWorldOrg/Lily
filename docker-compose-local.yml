@@ -1,68 +1,55 @@
 services:
-  web:
-    container_name: new-world-web
-    image: nginx:latest
+  app:
+    build:
+      target: base
     depends_on:
-      - app
+      - js
+      - db
     networks:
       - default
       - docker_default
     volumes:
-      - code:/code
-      - ./docker/nginx/conf.d/local.d/default.conf:/etc/nginx/conf.d/default.conf
-    environment:
-      - TZ=${TZ}
+      - .:/code
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.new-world-app.rule=Host(`nw.localhost`)"
-  app:
-    container_name: new-world-app
-    build:
-      context: .
-      dockerfile: ./docker/php/Dockerfile
-      args:
-        APP_ENV: ${APP_ENV}
-    tty: true
-    environment:
-      - TZ=${TZ}
-    volumes:
-      - code:/code
-      - ./docker/php/php.ini:/usr/local/etc/php/php.ini
-    depends_on:
-      - js
-      - db
-    labels:
-      - "traefik.enable=false"
+      - "traefik.http.routers.nw-app.rule=Host(`api.nw.localhost`)"
   js:
-    container_name: new-world-js
-    build:
-      context: .
-      dockerfile: ./docker/js/Dockerfile
-    tty: true
+    image: node:22.11.0-slim
+    working_dir: /code
+    command: ["sh", "-c", "yarn install && yarn dev"]
     volumes:
-      - code:/code
-      - node-modules:/code/node_modules
+      - .:/code
+    expose:
+      - 80
+    networks:
+      - docker_default
     labels:
-      - "traefik.enable=false"
+      - "traefik.enable=true"
+      - "traefik.http.routers.nw-hmr.rule=Host(`hmr.nw.localhost`)"
   db:
-    container_name: new-world-db
-    image: mysql:8.3.0
+    image: mysql:9.1.0
     volumes:
       - db-store:/var/lib/mysql
       - ./docker/db/init.sql:/docker-entrypoint-initdb.d/0.sql
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_bin
     environment:
       - MYSQL_DATABASE=${DB_DATABASE}
       - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
       - TZ=${TZ}
     ports:
       - "3306:3306"
+    networks:
+      - default
+      - docker_default
     labels:
       - "traefik.enable=false"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
 volumes:
   code:
   node-modules:
   db-store:
 networks:
-  default: {}
   docker_default:
+    external: true
     name: docker_default
