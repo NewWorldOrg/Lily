@@ -82,7 +82,7 @@ class DiscordBotCommandSystem
                 $drugRegisterHelper->convertInToDiscordEmbed($drug),
             );
         } catch (\Exception $e) {
-            Log::warning($e->getMessage());
+            Log::warning($e->getTraceAsString());
             $this->messageSender->sendEmbed(
                 $message,
                 $drugRegisterHelper->convertIntoDiscordEmbedFailure(),
@@ -117,7 +117,7 @@ class DiscordBotCommandSystem
                 $medicationHistoryHelper->toMedicationHistoryCreatedEmbed($medicationHistory, $drug),
             );
         } catch (InvalidArgumentException | NotFoundException $e) {
-            Log::error($e->getMessage());
+            Log::error($e->getTraceAsString());
             $this->messageSender->sendEmbed(
                 $message,
                 $medicationHistoryHelper->toMedicationHistoryFailedEmbed(),
