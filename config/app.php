@@ -178,6 +178,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\DataBaseQueryLoggerServiceProvider::class,
         App\Providers\RepositoryServiceProvider::class,
+        App\Providers\AdminLteServiceProvider::class,
     ],
 
     /*

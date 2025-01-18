@@ -18,14 +18,26 @@ class Accessible
 
         // Current route is not one of available routes
         if ($currentUser) {
-            $accessibleRoutes = $this->getAccessibleRoutes(
-                $currentUser->getAdminUser()->getRole()->getValue()->getRawValue()
-            );
+            // Current route is not one of available routes
+            $canAccess = $this->canAccess($currentUser, \Route::currentRouteName());
 
-            abort_unless($this->containsCurrentRoute($accessibleRoutes), 403);
+            abort_unless($canAccess, 403);
         }
 
         return $next($request);
+    }
+
+    public function canAccess(AdminUser $adminUser, ?string $routeName): bool
+    {
+        if (is_null($routeName)) {
+            return false;
+        }
+
+        $accessibleRoutes = $this->getAccessibleRoutes(
+            $adminUser->getAdminUser()->getRole()
+        );
+
+        return $this->containsCurrentRoute($routeName, $accessibleRoutes);
     }
 
     /**
@@ -34,7 +46,8 @@ class Accessible
      * @param int $roleId
      * @return array
      */
-    protected function getAccessibleRoutes(int $roleId): array {
+    protected function getAccessibleRoutes(AdminUserRole $adminUserRole): array
+    {
 
         $routes = [
             AdminUserRole::ROLE_SYSTEM->getValue()->getRawValue() => [
@@ -52,7 +65,7 @@ class Accessible
             ],
         ];
 
-        return data_get($routes, $roleId, []);
+        return (array)data_get($routes, $adminUserRole->getValue()->getRawValue(), []);
 
     }
 
@@ -62,13 +75,10 @@ class Accessible
      * @param array $availableRoutes
      * @return bool
      */
-    protected function containsCurrentRoute(array $availableRoutes): bool
+    protected function containsCurrentRoute(string $routeName, array $availableRoutes): bool
     {
-
-        $currentRoute = \Route::currentRouteName();
-
         foreach ($availableRoutes as $route) {
-            if (Str::is($route, $currentRoute)) {
+            if (Str::is($route, $routeName)) {
                 return true;
             }
         }

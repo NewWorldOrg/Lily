@@ -1,8 +1,15 @@
-@extends('vendor.adminlte.page')
-@section('content')
+@extends('vendor.adminlte.auth.login')
+
+@section('auth_body')
 <div class="login-box-body">
     <h4 class="login-box-msg"><strong>Please Login</strong></h4>
     <form class="form" action="{{ route('admin.auth.login.post') }}" method="POST">
+        @csrf
+        @if(env('APP_ENV') === 'local')
+            <p class="card-description text-center">
+                Or Sign in with <strong>takada_yuki</strong> and the password <strong>hogehoge</strong>
+            </p>
+        @endif
         <div class="form-group{{ $errors->has('user_id') ? ' has-danger' : '' }} has-feedback">
             <div class="input-group">
                 <div class="input-group-prepend">
