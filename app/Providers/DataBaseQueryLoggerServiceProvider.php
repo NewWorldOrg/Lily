@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use DateTime;
 use DateTimeZone;
 use DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\ServiceProvider;
 
