@@ -17,18 +17,19 @@
 
 @section('content')
     <form action="{{ route('admin.medication_histories.update', $medicationHistory) }}" method="POST">
-    <div class="form-group info">
-        <label>服薬者</label>
-        <input name="taker" value="{{ $medicationHistory->user->name }}" class="form-control" disabled />
-    </div>
-    <div class="form-group info">
-        <label>薬物名</label>
-        <input name="drug_name" value="{{ $medicationHistory->drug->drug_name }}" class="form-control" disabled />
-    </div>
-    <div class="form-group info">
-        <label>服薬用</label>
-        <input name="amount" value="{{ old('amount', $medicationHistory->amount) }}" class="form-control" placeholder="Enter amount" required/>
-    </div>
-    <button type="submit" class="btn btn-round btn-info">更新</button>
+        @csrf
+        <div class="form-group info">
+            <label>服薬者</label>
+            <input name="taker" value="{{ $medicationHistory->user->name }}" class="form-control" disabled />
+        </div>
+        <div class="form-group info">
+            <label>薬物名</label>
+            <input name="drug_name" value="{{ $medicationHistory->drug->drug_name }}" class="form-control" disabled />
+        </div>
+        <div class="form-group info">
+            <label>服薬用</label>
+            <input name="amount" value="{{ old('amount', $medicationHistory->amount) }}" class="form-control" placeholder="Enter amount" required/>
+        </div>
+        <button type="submit" class="btn btn-round btn-info">更新</button>
     </form>
 @endsection

@@ -17,6 +17,7 @@
 
 @section('content')
     <form action="{{ route('admin.drugs.update', $drug) }}" method="POST">
+        @csrf
         <div class="form-group info">
             <label>薬物名</label>
             <input name="drug_name" value="{{ old('drug_name', $drug->drug_name) }}" class="form-control " placeholder="Enter drug name" required/>
