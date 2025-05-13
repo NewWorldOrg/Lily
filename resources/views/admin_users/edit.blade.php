@@ -17,6 +17,7 @@
 
 @section('content')
     <form action="{{ route('admin.admin_users.store') }}" method="POST">
+        @csrf
         <div class="form-group info">
             <label for="InputUserId">User ID</label>
             <input name="user_id" value="{{ old('user_id') }}" class="form-control " placeholder="Enter user id" required/>
