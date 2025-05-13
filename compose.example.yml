@@ -10,13 +10,14 @@ services:
       - docker_default
     volumes:
       - .:/code
+      - ./docker/unit/zz-custom.ini:/usr/local/etc/php/zz-custom.ini
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.nw-app.rule=Host(`api.nw.localhost`)"
+      - "traefik.http.routers.lily.rule=Host(`lily.localhost`)"
   js:
     image: node:22.11.0-slim
     working_dir: /code
-    command: ["sh", "-c", "yarn install && yarn dev"]
+    command: ["sh", "-c", "yarn && yarn dev"]
     volumes:
       - .:/code
     expose:
@@ -25,7 +26,7 @@ services:
       - docker_default
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.nw-hmr.rule=Host(`hmr.nw.localhost`)"
+      - "traefik.http.routers.lily-hmr.rule=Host(`hmr.lily.localhost`)"
   db:
     image: mysql:9.1.0
     volumes:
@@ -45,10 +46,12 @@ services:
       - "traefik.enable=false"
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+
 volumes:
   code:
   node-modules:
   db-store:
+
 networks:
   docker_default:
     external: true

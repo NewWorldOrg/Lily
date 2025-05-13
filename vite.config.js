@@ -6,7 +6,7 @@ export default defineConfig({
         port: 80,
         host: '0.0.0.0',
         hmr: {
-            host: 'hmr.nw.localhost'
+            host: 'hmr.lily.localhost'
         }
     },
     plugins: [
