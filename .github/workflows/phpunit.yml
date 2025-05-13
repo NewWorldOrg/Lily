@@ -50,6 +50,15 @@ jobs:
         run: composer install
       - name: composer dump autoload
         run: composer dump-autoload
+      - name: Setup node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Build js
+        id: build-js
+        run: |
+          yarn
+          yarn build
       - name: storage link
         run: php artisan storage:link
       - name: migrate
