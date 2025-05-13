@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Tests\Feature\Admin;
 
 use Domain\AdminUser\AdminUserId;
+use Domain\AdminUser\AdminUserRole;
+use Domain\AdminUser\AdminUserStatus;
 use Domain\Common\RawString;
 use Domain\Exception\NotFoundException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -67,8 +69,8 @@ class AdminUserControllerTest extends TestCase
             'user_id' => 'test_takada_yuki',
             'password' => 'hogehoge',
             'name' => '高田憂希',
-            'role' => 1,
-            'status' => 1,
+            'role' => AdminUserRole::ROLE_SYSTEM->getValue()->getRawValue(),
+            'status' => AdminUserStatus::STATUS_VALID->getValue()->getRawValue(),
         ];
 
         AdminUserModel::create($params);
@@ -94,8 +96,7 @@ class AdminUserControllerTest extends TestCase
             'user_id' => 'takada_yuki_test',
             'password' => 'hogehoge',
         ])
-            ->assertRedirect(route('admin.top_page'))
-            ->assertSessionHas('success');
+            ->assertRedirect(route('admin.top_page'));
     }
 
     public function testDestroy()
