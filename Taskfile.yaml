@@ -8,7 +8,7 @@ tasks:
   init_local:
     cmds:
       - cp .env.example .env
-      - cp docker-compose-local.yml compose.yml
+      - cp compose.example.yml compose.yml
 
   init_prod:
     cmds:
@@ -73,7 +73,7 @@ tasks:
     cmd: mutagen-compose -f compose.yml -f compose.mutagen.yml down
 
   stop:
-    cmd: docker compose stop
+    cmd: docker compose stopca
 
   setup:
     cmds:
