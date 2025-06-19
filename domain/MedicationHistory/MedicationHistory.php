@@ -4,7 +4,6 @@ namespace Domain\MedicationHistory;
 
 use Domain\Common\CreatedAt;
 use Domain\Drug\DrugId;
-use Domain\User\Id as UserId;
 
 class MedicationHistory
 {

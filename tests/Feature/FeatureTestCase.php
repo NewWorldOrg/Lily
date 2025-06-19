@@ -5,38 +5,29 @@ declare(strict_types=1);
 namespace Tests\Feature;
 
 use App\Auth\AdminUser;
-use App\Auth\User;
 use Domain\AdminUser\AdminUser as AdminUserDomain;
 use Domain\AdminUser\AdminUserId;
 use Domain\AdminUser\AdminUserRole;
 use Domain\AdminUser\AdminUserStatus;
-use Domain\Common\ExpiredAt;
-use Domain\Common\Token;
 use Domain\Drug\Drug;
 use Domain\MedicationHistory\MedicationHistory;
 use Domain\User\DefinitiveRegisterToken\DefinitiveRegisterToken;
-use Domain\User\User as UserDomain;
-use Domain\User\UserId;
 use Domain\User\UserStatus;
 use Illuminate\Support\Facades\Hash;
 use Infra\EloquentModels\AdminUser as AdminUserModel;
 use Infra\EloquentModels\Drug as DrugModel;
 use Infra\EloquentModels\MedicationHistory as MedicationHistoryModel;
 use Infra\EloquentModels\User as UserModel;
-use Infra\EloquentModels\UserDefinitiveRegisterToken as UserDefinitiveRegisterTokenModel;
 use Infra\EloquentRepository\AdminUserRepository;
-use Infra\EloquentRepository\UserRepository;
 use Tests\TestCase;
 
 class FeatureTestCase extends TestCase
 {
     private AdminUserRepository $adminUserRepository;
-    private UserRepository $userRepository;
 
     protected AdminUserDomain $adminUser;
     protected Drug $drug;
     protected MedicationHistory $medicationHistory;
-    protected UserDomain $user;
     protected DefinitiveRegisterToken $definitiveRegisterToken;
 
     public function setUp(): void
@@ -44,10 +35,8 @@ class FeatureTestCase extends TestCase
         parent::setUp();
 
         $this->adminUserRepository = $this->app->make(AdminUserRepository::class);
-        $this->userRepository = $this->app->make(UserRepository::class);
 
         $this->createAdminUser();
-        $this->createUser();
         $this->createDrug();
         $this->createMedicationHistory();
     }
@@ -62,17 +51,6 @@ class FeatureTestCase extends TestCase
         );
 
         $this->be($admin, 'web');
-    }
-
-    public function userLogin(): void
-    {
-        $user = new User(
-            $this->userRepository->getUserByUserId(
-                new UserId(19890308)
-            ),
-        );
-
-        $this->be($user, 'api');
     }
 
     public function createAdminUser(): void
@@ -105,60 +83,14 @@ class FeatureTestCase extends TestCase
     public function createMedicationHistory(): void
     {
         $model = new MedicationHistoryModel();
-        $user = $this->user;
         $drug = $this->drug;
 
-        $model->user_id = $user->getId()->getRawValue();
+        $model->user_id = 930316;
         $model->drug_id = $drug->getId()->getRawValue();
         $model->amount = 2;
 
         $model->save();
 
         $this->medicationHistory = $model->toDomain();
-    }
-
-    public function createUser(): void
-    {
-        $model = new UserModel();
-
-        $model->user_id = 19890308;
-        $model->name = '松井恵理子';
-        $model->icon_url = 'https://example.com';
-        $model->password = Hash::make('hogehoge');
-        $model->status = UserStatus::STATUS_VALID->getValue()->getRawValue();
-
-        $model->save();
-
-        $this->user = $model->toDomain();
-    }
-
-    public function createUnregisteredUser():void
-    {
-        $model = new UserModel();
-
-        $model->user_id = 19890308;
-        $model->name = '松井恵理子';
-        $model->icon_url = 'https://example.com';
-        $model->password = Hash::make('hogehoge');
-        $model->status = UserStatus::STATUS_UNREGISTERED->getValue()->getRawValue();
-
-        $model->save();
-
-        $this->user = $model->toDomain();
-    }
-
-    public function createUnusedToken(): void
-    {
-        $this->createUnregisteredUser();
-
-        $model = new UserDefinitiveRegisterTokenModel();
-        $model->user_id = $this->user->getUserId()->getRawValue();
-        $model->token = Token::makeRandomCoStr(64)->getRawValue();
-        $model->is_verify = false;
-        $model->expired_at = ExpiredAt::makeExpiredAtTime()->getSqlTimeStamp();
-
-        $model->save();
-
-        $this->definitiveRegisterToken = $model->toDomain();
     }
 }

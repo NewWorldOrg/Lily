@@ -13,7 +13,7 @@ use Domain\Drug\DrugUrl;
 use Domain\Exception\InvalidArgumentException;
 use Domain\Exception\NotFoundException;
 use Domain\MedicationHistory\MedicationHistoryRepository;
-use Domain\User\Id;
+use Domain\MedicationHistory\UserId;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Infra\Discord\EmbedHelper\CommandNotFoundHelper;
@@ -103,7 +103,7 @@ class DiscordBotCommandSystem
             );
 
             $medicationHistory = $this->medicationHistoryRepository->create(
-                new Id((int)$message->author->id),
+                new UserId((int)$message->author->id),
                 $drug->getId(),
                 $args->getAmount(),
             );

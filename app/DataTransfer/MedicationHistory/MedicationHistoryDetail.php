@@ -6,13 +6,11 @@ namespace App\DataTransfer\MedicationHistory;
 
 use Domain\Drug\Drug;
 use Domain\MedicationHistory\MedicationHistory;
-use Domain\User\User;
 
 class MedicationHistoryDetail
 {
     public function __construct(
         private MedicationHistory $medicationHistory,
-        private User $user,
         private Drug $drug,
     ){
     }
@@ -23,14 +21,6 @@ class MedicationHistoryDetail
     public function getMedicationHistory(): MedicationHistory
     {
         return $this->medicationHistory;
-    }
-
-    /**
-     * @return User
-     */
-    public function getUser(): User
-    {
-        return $this->user;
     }
 
     /**

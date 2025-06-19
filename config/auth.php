@@ -68,10 +68,6 @@ return [
             'driver' => 'adminAuth',
             'model' => App\Auth\AdminUser::class,
         ],
-        'users' => [
-            'driver' => 'userAuth',
-            'model' => App\Auth\User::class,
-        ]
     ],
 
     /*
