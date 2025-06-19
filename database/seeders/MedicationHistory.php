@@ -17,7 +17,7 @@ class MedicationHistory extends Seeder
     public function run()
     {
         DB::table('medication_histories')->insert([
-            'user_id' => 1,
+            'user_id' => 930316,
             'drug_id' => 1,
             'amount' => 2,
             'created_at' => CreatedAt::now()->getSqlTimeStamp(),
@@ -25,7 +25,7 @@ class MedicationHistory extends Seeder
         ]);
 
         DB::table('medication_histories')->insert([
-            'user_id' => 1,
+            'user_id' => 930316,
             'drug_id' => 2,
             'amount' => 10,
             'created_at' => CreatedAt::now()->getSqlTimeStamp(),
