@@ -5,6 +5,9 @@ vars:
     sh: "docker compose ps -q app"
 
 tasks:
+  default:
+    cmd: task --list-all
+
   init_local:
     cmds:
       - cp .env.example .env

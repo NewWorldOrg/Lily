@@ -16,7 +16,7 @@
 @endsection
 
 @section('content')
-    <form action="{{ route('admin.admin_users.store') }}" method="POST">
+    <form action="{{ route('admin.admin_users.update', $adminUser) }}" method="POST">
         @csrf
         <div class="form-group info">
             <label for="InputUserId">User ID</label>

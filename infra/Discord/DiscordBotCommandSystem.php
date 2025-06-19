@@ -13,8 +13,7 @@ use Domain\Drug\DrugUrl;
 use Domain\Exception\InvalidArgumentException;
 use Domain\Exception\NotFoundException;
 use Domain\MedicationHistory\MedicationHistoryRepository;
-use Domain\User\UserId;
-use Domain\User\UserRepository;
+use Domain\User\Id;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Infra\Discord\EmbedHelper\CommandNotFoundHelper;
@@ -31,7 +30,6 @@ class DiscordBotCommandSystem
     public function __construct (
         private DrugRepository $drugRepository,
         private MedicationHistoryRepository $medicationHistoryRepository,
-        private UserRepository $userRepository,
     ) {
         $this->wikiApiUrl = new RawString('https://ja.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro&explaintext&redirects=1&titles=');
         $this->wikiViewPageUrl = new RawString('https://ja.wikipedia.org/wiki/');
@@ -104,10 +102,8 @@ class DiscordBotCommandSystem
                 $args->getDrugName()
             );
 
-            $user = $this->userRepository->getUserByUserId(new UserId((int)$message->author->id));
-
             $medicationHistory = $this->medicationHistoryRepository->create(
-                $user->getId(),
+                new Id((int)$message->author->id),
                 $drug->getId(),
                 $args->getAmount(),
             );
