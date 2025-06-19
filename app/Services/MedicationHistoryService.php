@@ -14,16 +14,14 @@ use Domain\MedicationHistory\MedicationHistory;
 use Domain\MedicationHistory\Amount;
 use Domain\MedicationHistory\MedicationHistoryDomainService;
 use Domain\MedicationHistory\MedicationHistoryRepository;
-use Domain\User\Id;
+use Domain\MedicationHistory\UserId;
 use App\Services\Service as AppService;
-use Domain\User\UserDomainService;
 
 class MedicationHistoryService extends AppService
 {
     public function __construct(
         private MedicationHistoryDomainService $medicationHistoryDomainService,
         private DrugDomainService $drugDomainService,
-        private UserDomainService $userDomainService,
         private MedicationHistoryRepository $medicationHistoryRepository,
     ){
     }
@@ -43,8 +41,7 @@ class MedicationHistoryService extends AppService
         foreach ($result as $key => $item) {
             /** @var MedicationHistory $item */
             $drug = $this->drugDomainService->show($item->getDrugId());
-            $user = $this->userDomainService->getUserById($item->getUserId());
-            $medicationHistoryDetailList[$key] = new MedicationHistoryDetail($item, $user, $drug);
+            $medicationHistoryDetailList[$key] = new MedicationHistoryDetail($item, $drug);
         }
 
         return new MedicationHistoryDetailPaginator(
@@ -54,7 +51,7 @@ class MedicationHistoryService extends AppService
         );
     }
 
-    public function createMedicationHistory(Id $userId, DrugName $drugName, Amount $amount): array
+    public function createMedicationHistory(UserId $userId, DrugName $drugName, Amount $amount): array
     {
         $drug = $this->drugDomainService->findDrugByName($drugName);
         $result = $this->medicationHistoryDomainService->create($userId, $drug->getId(), $amount);

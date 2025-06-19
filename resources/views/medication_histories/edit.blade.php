@@ -20,7 +20,7 @@
         @csrf
         <div class="form-group info">
             <label>服薬者</label>
-            <input name="taker" value="{{ $medicationHistory->user->name }}" class="form-control" disabled />
+            <input name="taker" value="{{ $medicationHistory->user_id }}" class="form-control" disabled />
         </div>
         <div class="form-group info">
             <label>薬物名</label>

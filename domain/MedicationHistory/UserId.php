@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Domain\User;
+namespace Domain\MedicationHistory;
 
 use Domain\Base\BasePositiveInteger;
 

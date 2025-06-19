@@ -35,12 +35,5 @@ class AuthServiceProvider extends ServiceProvider
                 $app['hash'],
             );
         });
-
-        $authManager->provider('userAuth', function($app) {
-            return new UserProvider(
-                $app->make(UserRepository::class),
-                $app['hash'],
-            );
-        });
     }
 }

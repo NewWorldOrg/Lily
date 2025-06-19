@@ -25,7 +25,7 @@
         <?php /** @var App\DataTransfer\MedicationHistory\MedicationHistoryDetail $item */ ?>
     <tr>
         <td>{{ $item->getMedicationHistory()->getId()->getRawValue() }}</td>
-        <td>{{ $item->getUser()->getName()->getRawValue() }}</td>
+        <td>{{ $item->getMedicationHistory()->getUserId()->getRawValue() }}</td>
         <td>{{ $item->getDrug()->getName()->getRawValue()}}</td>
         <td>{{ $item->getMedicationHistory()->getAmount()->getRawValue() }}</td>
         <td>{{ $item->getMedicationHistory()->getCreatedAt()->getDetail() }}</td>

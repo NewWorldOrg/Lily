@@ -16,14 +16,13 @@ use Domain\MedicationHistory\MedicationHistoryCount;
 use Domain\MedicationHistory\MedicationHistoryId;
 use Domain\MedicationHistory\MedicationHistoryList;
 use Domain\MedicationHistory\MedicationHistoryRepository as MedicationHistoryRepositoryInterface;
-use Domain\User\Id;
+use Domain\MedicationHistory\UserId;
 use Infra\EloquentModels\MedicationHistory as MedicationHistoryModel;
 
 class MedicationHistoryRepository implements MedicationHistoryRepositoryInterface
 {
     private const WITH_MODEL = [
         'drug',
-        'user',
     ];
 
     public function getPaginator(Paginate $paginate): MedicationHistoryList
@@ -53,24 +52,7 @@ class MedicationHistoryRepository implements MedicationHistoryRepositoryInterfac
         );
     }
 
-    public function getPaginateByUserId(Id $userId, Paginate $paginate): MedicationHistoryList
-    {
-        $builder = MedicationHistoryModel::with(self::WITH_MODEL)
-            ->where([
-            'user_id' => $userId->getRawValue()
-            ])
-            ->orderBy('id', OrderKey::DESC->getValue()->getRawValue())
-            ->limit($paginate->getLimit()->getRawValue())
-            ->offset($paginate->offset()->getRawValue());
-
-        $collection = $builder->get();
-
-        return new MedicationHistoryList($collection->map(function (MedicationHistoryModel $model) {
-            return $model->toDomain();
-        })->toArray());
-    }
-
-    public function create(Id $userId, DrugId $drugId, Amount $amount): MedicationHistory
+    public function create(UserId $userId, DrugId $drugId, Amount $amount): MedicationHistory
     {
         $model = new MedicationHistoryModel();
 

@@ -7,6 +7,7 @@ namespace Domain\User;
 use Domain\Common\RawPassword;
 use Domain\Common\Token;
 use Domain\Exception\DuplicateEntryException;
+use Domain\MedicationHistory\UserId;
 use Domain\User\DefinitiveRegisterToken\DefinitiveRegisterTokenRepository;
 use Illuminate\Contracts\Hashing\Hasher;
 use Infra\Discord\DiscordBotClient;
@@ -14,7 +15,6 @@ use Infra\Discord\DiscordBotClient;
 class UserDomainService
 {
     public function __construct(
-        private UserRepository $userRepository,
         private DefinitiveRegisterTokenRepository $definitiveRegisterTokenRepository,
         private Hasher $hasher,
         private DiscordBotClient $discordBotClient,

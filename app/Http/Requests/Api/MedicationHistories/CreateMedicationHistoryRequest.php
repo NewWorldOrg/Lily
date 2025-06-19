@@ -7,7 +7,7 @@ namespace App\Http\Requests\Api\MedicationHistories;
 use App\Http\Api\Shered\Request\ApiRequest;
 use Domain\Drug\DrugName;
 use Domain\MedicationHistory\Amount;
-use Domain\User\Id as UserId;
+use Domain\MedicationHistory\UserId;
 
 class CreateMedicationHistoryRequest extends ApiRequest
 {

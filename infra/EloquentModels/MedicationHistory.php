@@ -9,7 +9,7 @@ use Domain\Drug\DrugId;
 use Domain\MedicationHistory\MedicationHistory as MedicationHistoryDomain;
 use Domain\MedicationHistory\Amount;
 use Domain\MedicationHistory\MedicationHistoryId;
-use Domain\User\Id;
+use Domain\MedicationHistory\UserId;
 use Infra\EloquentModels\Model as AppModel;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -29,11 +29,6 @@ class MedicationHistory extends AppModel
         'drug_name',
     ];
 
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'user_id');
-    }
-
     public function drug(): BelongsTo
     {
         return $this->belongsTo(Drug::class, 'drug_id');
@@ -43,7 +38,7 @@ class MedicationHistory extends AppModel
     {
         return new MedicationHistoryDomain(
             new MedicationHistoryId((int)$this->id),
-            new Id((int)$this->user_id),
+            new UserId((int)$this->user_id),
             new DrugId((int)$this->drug_id),
             new Amount((float)$this->amount),
             CreatedAt::forStringTime((string)$this->created_at),
