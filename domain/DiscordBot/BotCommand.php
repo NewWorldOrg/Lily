@@ -36,16 +36,12 @@ enum BotCommand: string implements BaseEnum
 
     public static function makeFromDisplayName(string $displayName): self
     {
-        try {
-            $value = match ($displayName) {
-                'hello' => self::HELLO,
-                '薬物登録' => self::REGISTER_DRUG,
-                'のんだ' => self::MEDICATION
-            };
-        } catch(\UnhandledMatchError $e) {
-            return self::COMMAND_NOT_FOUND;
-        }
-        return $value;
+        return match ($displayName) {
+            'hello' => self::HELLO,
+            '薬物登録' => self::REGISTER_DRUG,
+            'のんだ' => self::MEDICATION,
+            default => self::COMMAND_NOT_FOUND,
+        };
     }
 
     public function getCommandArgumentClass(array $commandArgs)

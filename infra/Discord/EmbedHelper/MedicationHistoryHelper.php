@@ -31,7 +31,7 @@ class MedicationHistoryHelper
             . ' '
             . $medicationHistory->getAmount()->toFloat()
             . 'mg at '
-            . $medicationHistory->getCreatedAt()->getDetail()
+            . $medicationHistory->getMedicationDate()->getDetail()
         );
         $embed->setColor('#eac645');
         $embed->setAuthor($this->message->author->username, $userAvatar);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Infra\Discord;
 
 use Discord\Discord;
@@ -12,7 +14,7 @@ use Domain\Drug\DrugRepository;
 use Domain\Drug\DrugUrl;
 use Domain\Exception\InvalidArgumentException;
 use Domain\Exception\NotFoundException;
-use Domain\MedicationHistory\MedicationHistoryRepository;
+use Domain\MedicationHistory\MedicationHistoryDomainService;
 use Domain\MedicationHistory\UserId;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -29,7 +31,7 @@ class DiscordBotCommandSystem
 
     public function __construct (
         private DrugRepository $drugRepository,
-        private MedicationHistoryRepository $medicationHistoryRepository,
+        private MedicationHistoryDomainService $medicationHistoryDomainService,
     ) {
         $this->wikiApiUrl = new RawString('https://ja.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro&explaintext&redirects=1&titles=');
         $this->wikiViewPageUrl = new RawString('https://ja.wikipedia.org/wiki/');
@@ -102,10 +104,11 @@ class DiscordBotCommandSystem
                 $args->getDrugName()
             );
 
-            $medicationHistory = $this->medicationHistoryRepository->create(
+            $medicationHistory = $this->medicationHistoryDomainService->create(
                 new UserId((int)$message->author->id),
                 $drug->getId(),
                 $args->getAmount(),
+                $args->getMedicationDate(),
             );
 
             $this->messageSender->sendEmbed(
