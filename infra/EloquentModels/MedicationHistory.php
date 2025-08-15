@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Infra\EloquentModels;
 
 use Domain\Common\CreatedAt;
+use Domain\Common\UpdatedAt;
 use Domain\Drug\DrugId;
+use Domain\MedicationHistory\MedicationDate;
 use Domain\MedicationHistory\MedicationHistory as MedicationHistoryDomain;
 use Domain\MedicationHistory\Amount;
 use Domain\MedicationHistory\MedicationHistoryId;
@@ -14,7 +16,7 @@ use Infra\EloquentModels\Model as AppModel;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $user_id
@@ -66,7 +68,9 @@ class MedicationHistory extends AppModel
             new UserId((int)$this->user_id),
             new DrugId((int)$this->drug_id),
             new Amount((float)$this->amount),
+            MedicationDate::forStringTime((string)$this->medication_date),
             CreatedAt::forStringTime((string)$this->created_at),
+            UpdatedAt::forStringTime((string)$this->updated_at),
         );
     }
 }
