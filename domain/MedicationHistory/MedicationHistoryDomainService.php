@@ -7,14 +7,11 @@ namespace Domain\MedicationHistory;
 use Domain\Common\Paginator\Paginate;
 use Domain\Common\RawPositiveInteger;
 use Domain\Drug\DrugId;
-use Domain\User\Id;
-use Domain\User\UserDomainService;
 
 class MedicationHistoryDomainService
 {
     public function __construct(
         private MedicationHistoryRepository $medicationHistoryRepository,
-        private UserDomainService $userDomainService,
     ) {
     }
 
@@ -31,9 +28,14 @@ class MedicationHistoryDomainService
     public function create(
         UserId $userId,
         DrugId $drugId,
-        Amount $amount
+        Amount $amount,
+        ?MedicationDate $medicationDate,
     ): MedicationHistory {
-        return $this->medicationHistoryRepository->create($userId, $drugId, $amount);
+        if (is_null($medicationDate)) {
+            $medicationDate = MedicationDate::now();
+        }
+
+        return $this->medicationHistoryRepository->create($userId, $drugId, $amount, $medicationDate);
     }
 
     public function update(MedicationHistory $medicationHistory): MedicationHistory
