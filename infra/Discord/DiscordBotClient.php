@@ -59,27 +59,23 @@ class DiscordBotClient
             $discord->on('message', function(Message $message) use ($discord) {
                 $this->message = $message;
                 $commandPrefix = substr($this->message->content, 0, 1);
-                $removedCommandPrefix = str_replace($this->commandPrefix, '', $this->message->content);
-                $commandContents = [];
 
-                if (!$this->commandPrefixChecker($commandPrefix) || !$this->commandCheck($this->message)) {
+                if (!$this->commandPrefixChecker($commandPrefix) || $this->botCheck($this->message)) {
                     return false;
                 }
 
-                $removedCommandPrefix = mb_convert_kana($removedCommandPrefix, 'rsa');
-                $commandName = mb_strstr($removedCommandPrefix, ' ', true) ?: $removedCommandPrefix;
-                $botCommandName = BotCommand::makeFromDisplayName($commandName)->getValue()->getRawValue();
+                $input = str_replace($this->commandPrefix, '', $this->message->content);
+                $input = mb_convert_kana($input, 'rsa');
+                $commandName = mb_strstr($input, ' ', true) ?: '';
+                $cmd = BotCommand::makeFromDisplayName($commandName);
+                $args = $cmd->getCommandArgumentClass($this->argSplitter($input));
 
-                if (mb_strstr($removedCommandPrefix, ' ', true) || mb_strstr($removedCommandPrefix, '　', true)) {
-                    $commandContents += $this->argSplitter($removedCommandPrefix);
-                    unset($commandContents[0]);
-                    $commandArgs = array_values($commandContents);
-                    $commandArgs = BotCommand::makeFromDisplayName($commandName)->getCommandArgumentClass($commandArgs);
-                    $this->discordBotCommandSystem->$botCommandName($commandArgs, $discord, $this->message);
-                    return true;
-                }
-
-                $this->discordBotCommandSystem->$botCommandName($discord, $this->message);
+                match (true) {
+                    $cmd->isHello() => $this->discordBotCommandSystem->hello($discord, $this->message),
+                    $cmd->isRegisterDrug() => $this->discordBotCommandSystem->registerDrug($args, $discord, $this->message),
+                    $cmd->isMedication() => $this->discordBotCommandSystem->medication($args, $discord, $this->message),
+                    default => $this->discordBotCommandSystem->commandNotFound($discord, $this->message),
+                };
 
                 return true;
             });
@@ -119,19 +115,32 @@ class DiscordBotClient
         return $this->commandPrefix === $commandPrefix;
     }
 
-
-    /**
-     * Split the message and get dhe arguments
-     *
-     * @param string $commandContents
-     * @return array
-     */
     private function argSplitter(string $commandContents): array
     {
-        return explode(' ', $commandContents);
+        $pattern = '/
+            "([^"\\\\]*(?:\\\\.[^"\\\\]*)*)"
+            | \'([^\'\\\\]*(?:\\\\.[^\'\\\\]*)*)\'
+            | ([^\\s]+)
+            /xu';
+
+        preg_match_all($pattern, $commandContents, $matches, PREG_SET_ORDER | PREG_UNMATCHED_AS_NULL);
+
+        $tokens = [];
+
+        foreach ($matches as $m) {
+            $tokens[] = match (true) {
+                !is_null($m[1]) => stripcslashes($m[1]),
+                !is_null($m[2]) => stripcslashes($m[2]),
+                default => $m[3],
+            };
+        }
+
+        unset($tokens[0]);
+
+        return array_values($tokens);
     }
 
-    private function commandCheck(Message $message): bool
+    private function botCheck(Message $message): bool
     {
         $bot = $this->discord->user;
 
@@ -139,9 +148,9 @@ class DiscordBotClient
             $message->author->id === $bot->id
             || $message->author->bot
         ) {
-            return false;
+            return true;
         }
 
-        return true;
+        return false;
     }
 }

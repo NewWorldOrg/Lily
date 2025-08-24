@@ -15,7 +15,6 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             AdminUsersSeeder::class,
-            UsersSeeder::class,
             DrugSeeder::class,
             MedicationHistory::class,
         ]);

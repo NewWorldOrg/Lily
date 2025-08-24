@@ -36,16 +36,12 @@ enum BotCommand: string implements BaseEnum
 
     public static function makeFromDisplayName(string $displayName): self
     {
-        try {
-            $value = match ($displayName) {
-                'hello' => self::HELLO,
-                '薬物登録' => self::REGISTER_DRUG,
-                'のんだ' => self::MEDICATION
-            };
-        } catch(\UnhandledMatchError $e) {
-            return self::COMMAND_NOT_FOUND;
-        }
-        return $value;
+        return match ($displayName) {
+            'hello' => self::HELLO,
+            '薬物登録' => self::REGISTER_DRUG,
+            'のんだ' => self::MEDICATION,
+            default => self::COMMAND_NOT_FOUND,
+        };
     }
 
     public function getCommandArgumentClass(array $commandArgs)
@@ -54,5 +50,25 @@ enum BotCommand: string implements BaseEnum
             self::REGISTER_DRUG => new RegisterDrugCommandArgument($commandArgs),
             self::MEDICATION => new MedicationCommandArgument($commandArgs),
         };
+    }
+
+    public function isHello(): bool
+    {
+        return $this === self::HELLO;
+    }
+
+    public function isRegisterDrug(): bool
+    {
+        return $this === self::REGISTER_DRUG;
+    }
+
+    public function isMedication(): bool
+    {
+        return $this === self::MEDICATION;
+    }
+
+    public function isCommandNotFound(): bool
+    {
+        return $this === self::COMMAND_NOT_FOUND;
     }
 }

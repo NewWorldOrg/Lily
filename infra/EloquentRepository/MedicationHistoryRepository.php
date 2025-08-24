@@ -10,6 +10,7 @@ use Domain\Common\RawPositiveInteger;
 use Domain\Drug\DrugId;
 use Domain\Exception\LogicException;
 use Domain\Exception\NotFoundException;
+use Domain\MedicationHistory\MedicationDate;
 use Domain\MedicationHistory\MedicationHistory;
 use Domain\MedicationHistory\Amount;
 use Domain\MedicationHistory\MedicationHistoryCount;
@@ -52,13 +53,18 @@ class MedicationHistoryRepository implements MedicationHistoryRepositoryInterfac
         );
     }
 
-    public function create(UserId $userId, DrugId $drugId, Amount $amount): MedicationHistory
-    {
+    public function create(
+        UserId $userId,
+        DrugId $drugId,
+        Amount $amount,
+        MedicationDate $medicationDate,
+    ): MedicationHistory {
         $model = new MedicationHistoryModel();
 
         $model->user_id = $userId->getRawValue();
         $model->drug_id = $drugId->getRawValue();
         $model->amount = $amount->getRawValue();
+        $model->medication_date = $medicationDate->getSqlTimeStamp();
 
         $model->save();
 
