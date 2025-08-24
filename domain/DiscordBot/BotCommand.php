@@ -51,4 +51,24 @@ enum BotCommand: string implements BaseEnum
             self::MEDICATION => new MedicationCommandArgument($commandArgs),
         };
     }
+
+    public function isHello(): bool
+    {
+        return $this === self::HELLO;
+    }
+
+    public function isRegisterDrug(): bool
+    {
+        return $this === self::REGISTER_DRUG;
+    }
+
+    public function isMedication(): bool
+    {
+        return $this === self::MEDICATION;
+    }
+
+    public function isCommandNotFound(): bool
+    {
+        return $this === self::COMMAND_NOT_FOUND;
+    }
 }

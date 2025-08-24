@@ -10,6 +10,7 @@ use Domain\AdminUser\AdminUserId;
 use Domain\AdminUser\AdminUserRole;
 use Domain\AdminUser\AdminUserStatus;
 use Domain\Drug\Drug;
+use Domain\MedicationHistory\MedicationDate;
 use Domain\MedicationHistory\MedicationHistory;
 use Domain\User\DefinitiveRegisterToken\DefinitiveRegisterToken;
 use Domain\User\UserStatus;
@@ -88,6 +89,7 @@ class FeatureTestCase extends TestCase
         $model->user_id = 930316;
         $model->drug_id = $drug->getId()->getRawValue();
         $model->amount = 2;
+        $model->medication_date = MedicationDate::now()->getSqlTimeStamp();
 
         $model->save();
 

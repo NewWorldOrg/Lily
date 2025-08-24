@@ -12,14 +12,14 @@ class MedicationCommandArgument
 {
     private DrugName $drugName;
     private Amount $amount;
-    private ?MedicationDate $medicationDate;
+    private ?MedicationDate $medicationDate = null;
 
     public function __construct(array $args)
     {
         $this->drugName = new DrugName($args[0]);
         $this->amount = new Amount((float)$args[1]);
 
-        if (is_null($args[2])) {
+        if (array_key_exists(2, $args)) {
             $this->medicationDate = MedicationDate::forStringTime((string)$args[2]);
         }
     }

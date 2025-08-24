@@ -76,7 +76,7 @@ tasks:
     cmd: mutagen-compose -f compose.yml -f compose.mutagen.yml down
 
   stop:
-    cmd: docker compose stopca
+    cmd: docker compose stop
 
   setup:
     cmds:
