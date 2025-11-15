@@ -33,7 +33,7 @@ class DiscordBotCommandSystem
         private DrugRepository $drugRepository,
         private MedicationHistoryDomainService $medicationHistoryDomainService,
     ) {
-        $this->wikiApiUrl = new RawString('https://ja.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro&explaintext&redirects=1&titles=');
+        $this->wikiApiUrl = new RawString('https://ja.wikipedia.org/w/api.php');
         $this->wikiViewPageUrl = new RawString('https://ja.wikipedia.org/wiki/');
     }
 
@@ -55,13 +55,26 @@ class DiscordBotCommandSystem
         $drugRegisterHelper = new DrugRegisterHelper($discord, $message);
         $drugName = $args->getDrugName();
 
-        $result = Http::get($this->wikiApiUrl . $drugName->getRawValue());
+        $result = Http::withHeaders([
+            'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0'
+        ])->get(
+            $this->wikiApiUrl->getRawValue(),
+            [
+                'format' => 'json',
+                'action' => 'query',
+                'prop' => 'extracts',
+                'redirects' => '1',
+                'titles' => $drugName->getRawValue(),
+            ]
+        );
 
-        if (empty($result) || isset($result['query']['redirects'])) {
+
+        if ($result->failed()) {
             $this->messageSender->sendEmbed(
                 $message,
                 $drugRegisterHelper->convertIntoDiscordEmbedFailure(),
             );
+            return;
         }
 
         foreach ($result['query']['pages'] as $key => $value) {
