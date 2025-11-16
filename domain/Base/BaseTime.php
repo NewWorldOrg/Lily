@@ -54,6 +54,16 @@ abstract class BaseTime extends CoInteger
         return date('Y-m-d H:i:s', $this->timestamp);
     }
 
+    public function subDay(int $day): static
+    {
+        return new static (strtotime('-' . $day . 'day', $this->timestamp));
+    }
+
+    public function subSecond(int $second): static
+    {
+        return new static (strtotime('-' . $second . 'second', $this->timestamp));
+    }
+
     public function __toString(): string
     {
         return $this->getDisplay();

@@ -137,6 +137,11 @@ class DiscordBotCommandSystem
         }
     }
 
+    public function initSlashCommand(Discord $discord): void
+    {
+
+    }
+
     public function commandNotFound(Discord $discord, Message $message): void
     {
         $this->messageSender = new MessageSender();
