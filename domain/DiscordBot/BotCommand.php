@@ -11,7 +11,6 @@ use Domain\DiscordBot\CommandArgument\RegisterDrugCommandArgument;
 
 enum BotCommand: string implements BaseEnum
 {
-    case HELLO = 'hello';
     case REGISTER_DRUG = 'registerDrug';
     case MEDICATION = 'medication';
     case INIT_SLASH_COMMANDS = 'initSlashCommands';
@@ -21,7 +20,6 @@ enum BotCommand: string implements BaseEnum
     {
         try {
             return match($this) {
-                self::HELLO => new RawString('hello'),
                 self::REGISTER_DRUG => new RawString('薬物登録'),
                 self::MEDICATION => new RawString('のんだ'),
                 self::INIT_SLASH_COMMANDS => 'initSlashCommands',
@@ -39,9 +37,9 @@ enum BotCommand: string implements BaseEnum
     public static function makeFromDisplayName(string $displayName): self
     {
         return match ($displayName) {
-            'hello' => self::HELLO,
             '薬物登録' => self::REGISTER_DRUG,
             'のんだ' => self::MEDICATION,
+            'initSlashCommands' => self::INIT_SLASH_COMMANDS,
             default => self::COMMAND_NOT_FOUND,
         };
     }
@@ -52,11 +50,6 @@ enum BotCommand: string implements BaseEnum
             self::REGISTER_DRUG => new RegisterDrugCommandArgument($commandArgs),
             self::MEDICATION => new MedicationCommandArgument($commandArgs),
         };
-    }
-
-    public function isHello(): bool
-    {
-        return $this === self::HELLO;
     }
 
     public function isRegisterDrug(): bool

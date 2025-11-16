@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Infra\Discord;
 
+use Discord\Builders\CommandBuilder;
 use Discord\Builders\Components\Option;
 use Discord\Builders\Components\SelectMenu;
 use Discord\Builders\MessageBuilder;
@@ -192,10 +193,9 @@ class DiscordBotClient
                 $input = mb_convert_kana($input, 'rsa');
                 $commandName = mb_strstr($input, ' ', true) ?: '';
                 $cmd = BotCommand::makeFromDisplayName($commandName);
-                $args = $cmd->getCommandArgumentClass($this->argSplitter($input));
+                $args = $this->argSplitter($input) ?? $cmd->getCommandArgumentClass($this->argSplitter($input));
 
                 match (true) {
-                    $cmd->isHello() => $this->discordBotCommandSystem->hello($discord, $this->message),
                     $cmd->isRegisterDrug() => $this->discordBotCommandSystem->registerDrug($args, $discord, $this->message),
                     $cmd->isMedication() => $this->discordBotCommandSystem->medication($args, $discord, $this->message),
                     $cmd->isInitSlashCommands() => SlashCommand::toArray()->map(
@@ -267,13 +267,14 @@ class DiscordBotClient
         return array_values($tokens);
     }
 
-    public function initSlashCommands(DIscord $discord, SlashCommand $slashCommand): void
+    public function initSlashCommands(Discord $discord, SlashCommand $slashCommand): void
     {
-        $discord->application->commands->create(
-            [
-                'name' => $slashCommand->displayName()->getRawValue(),
-                'description' => $slashCommand->getDescription()->getRawValue(),
-            ],
+        $discord->application->commands->save(
+            $discord->application->commands->create(
+                CommandBuilder::new()
+                    ->setName($slashCommand->getValue()->getRawValue())
+                ->setDescription($slashCommand->getDescription()->getRawValue())->toArray()
+            )
         );
     }
 
