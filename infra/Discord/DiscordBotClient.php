@@ -156,7 +156,7 @@ class DiscordBotClient
 
         $this->discord->on('ready', function(Discord $discord) {
             $discord->getLoop()->addPeriodicTimer(1, function () use ($discord) {
-                $createdAt = CreatedAt::now()->subDay(1);
+                $createdAt = CreatedAt::now()->subSecond(20);
 
                 $messageList = $this->messageRepository->oneDayHasPassMessageList($createdAt);
 
@@ -206,8 +206,6 @@ class DiscordBotClient
 
                 return true;
             });
-
-
         });
 
         $this->discord->run();
@@ -290,8 +288,8 @@ class DiscordBotClient
         $bot = $this->discord->user;
 
         if (
-            $message->author->id === $bot->id
-            || $message->author->bot
+            $message->author->id !== $bot->id
+            || !$message->author->bot
         ) {
             return false;
         }
