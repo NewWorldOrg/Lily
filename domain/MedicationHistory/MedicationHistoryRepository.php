@@ -7,7 +7,6 @@ namespace Domain\MedicationHistory;
 use Domain\Common\Paginator\Paginate;
 use Domain\Common\RawPositiveInteger;
 use Domain\Drug\DrugId;
-use Domain\User\Id;
 
 interface MedicationHistoryRepository
 {

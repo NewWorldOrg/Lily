@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Courage\CoString;
 use Domain\AdminUser\AdminUserRole;
+use Domain\AdminUser\AdminUserStatus;
 use Domain\Common\CreatedAt;
 use Domain\Common\UpdatedAt;
 use Domain\User\UserStatus;
@@ -25,7 +26,7 @@ class AdminUsersSeeder extends Seeder
             'password' => Hash::make('hogehoge'),
             'name' => '高田憂希',
             'role' => AdminUserRole::ROLE_SYSTEM,
-            'status' => UserStatus::STATUS_VALID,
+            'status' => AdminUserStatus::STATUS_VALID,
             'created_at' => CreatedAt::now()->getSqlTimeStamp(),
             'updated_at' => UpdatedAt::now()->getSqlTimeStamp(),
         ]);
