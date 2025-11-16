@@ -157,7 +157,7 @@ class DiscordBotClient
 
         $this->discord->on('ready', function(Discord $discord) {
             $discord->getLoop()->addPeriodicTimer(1, function () use ($discord) {
-                $createdAt = CreatedAt::now()->subSecond(20);
+                $createdAt = CreatedAt::now()->subDay(1);
 
                 $messageList = $this->messageRepository->oneDayHasPassMessageList($createdAt);
 
