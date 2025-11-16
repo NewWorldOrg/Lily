@@ -6,16 +6,10 @@ namespace Infra\Discord;
 
 use Discord\Discord;
 use Discord\Exceptions\IntentException;
-use Discord\Http\Drivers\React;
-use Discord\Http\Http;
 use Discord\Parts\Channel\Message;
 use Discord\WebSockets\Intents;
 use Domain\DiscordBot\BotCommand;
-use Domain\MedicationHistory\UserId;
-use Domain\User\DefinitiveRegisterToken\DefinitiveRegisterToken;
-use Monolog\Handler\StreamHandler;
-use Monolog\Logger;
-use stdClass;
+use Domain\DiscordBot\SlashCommands\SlashCommand;
 
 class DiscordBotClient
 {
@@ -33,16 +27,14 @@ class DiscordBotClient
     protected Message $message;
 
     /**
-     * This Command Prefix
+     * The command prefix.
      *
      * @var string
      */
     protected string $commandPrefix = '!';
 
-    protected string $dmChannelId;
-
     /**
-     * Starting run a discord bot
+     * Launch the bot
      *
      * @param string $botToken
      * @throws IntentException
@@ -74,6 +66,9 @@ class DiscordBotClient
                     $cmd->isHello() => $this->discordBotCommandSystem->hello($discord, $this->message),
                     $cmd->isRegisterDrug() => $this->discordBotCommandSystem->registerDrug($args, $discord, $this->message),
                     $cmd->isMedication() => $this->discordBotCommandSystem->medication($args, $discord, $this->message),
+                    $cmd->isInitSlashCommands() => SlashCommand::toArray()->map(
+                        fn (SlashCommand $slashCommand) => $this->initSlashCommands($discord, $slashCommand)
+                    ),
                     default => $this->discordBotCommandSystem->commandNotFound($discord, $this->message),
                 };
 
@@ -81,27 +76,6 @@ class DiscordBotClient
             });
         });
         $this->discord->run();
-    }
-
-    public function sendDefinitiveRegisterUrlByDm(UserId $userId, DefinitiveRegisterToken $token): void
-    {
-        $loop = \React\EventLoop\Loop::get();
-        $logger = (new Logger('discord-direct-message'))->pushHandler(new StreamHandler('php://stdout'));
-        $driver = new React($loop);
-        $discordHttp = new Http('Bot '. env('DISCORD_BOT_TOKEN'), $loop, $logger, $driver);
-
-        $dmChannelIdRequestPath = '/users/@me/channels';
-        $content = ['recipient_id' => $userId->getRawValue()];
-        $discordHttp->post($dmChannelIdRequestPath, $content)->then(function(stdClass $response) {
-            $this->dmChannelId = $response->id;
-        });
-        $loop->run();
-
-        $dmApiPath = "/channels/{$this->dmChannelId}/messages";
-        $registerUrl = url("/definitive_register?token={$token->getToken()->getRawValue()}");
-        $discordHttp->post($dmApiPath, ['content' => $registerUrl]);
-        $loop->run();
-        $loop->stop();
     }
 
     /**
@@ -140,6 +114,22 @@ class DiscordBotClient
         return array_values($tokens);
     }
 
+    public function initSlashCommands(DIscord $discord, SlashCommand $slashCommand): void
+    {
+        $discord->application->commands->create(
+            [
+                'name' => $slashCommand->displayName()->getRawValue(),
+                'description' => $slashCommand->getDescription()->getRawValue(),
+            ],
+        );
+    }
+
+    /**
+     * Return true if this message was sent by the bot.
+     *
+     * @param Message $message
+     * @return bool
+     */
     private function botCheck(Message $message): bool
     {
         $bot = $this->discord->user;
@@ -148,9 +138,9 @@ class DiscordBotClient
             $message->author->id === $bot->id
             || $message->author->bot
         ) {
-            return true;
+            return false;
         }
 
-        return false;
+        return true;
     }
 }

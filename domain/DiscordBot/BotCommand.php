@@ -14,6 +14,7 @@ enum BotCommand: string implements BaseEnum
     case HELLO = 'hello';
     case REGISTER_DRUG = 'registerDrug';
     case MEDICATION = 'medication';
+    case INIT_SLASH_COMMANDS = 'initSlashCommands';
     case COMMAND_NOT_FOUND = 'commandNotFound';
 
     public function displayName(): RawString
@@ -23,8 +24,9 @@ enum BotCommand: string implements BaseEnum
                 self::HELLO => new RawString('hello'),
                 self::REGISTER_DRUG => new RawString('薬物登録'),
                 self::MEDICATION => new RawString('のんだ'),
+                self::INIT_SLASH_COMMANDS => 'initSlashCommands',
             };
-        } catch ( \UnhandledMatchError $e) {
+        } catch ( \UnhandledMatchError) {
             return new RawString('実装されていないコマンドです');
         }
     }
@@ -67,8 +69,8 @@ enum BotCommand: string implements BaseEnum
         return $this === self::MEDICATION;
     }
 
-    public function isCommandNotFound(): bool
+    public function isInitSlashCommands(): bool
     {
-        return $this === self::COMMAND_NOT_FOUND;
+        return $this === self::INIT_SLASH_COMMANDS;
     }
 }
