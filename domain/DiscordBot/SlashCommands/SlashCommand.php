@@ -9,8 +9,8 @@ use Domain\Common\RawString;
 
 enum SlashCommand: string implements BaseEnum
 {
-    case CLEANUP_HISTORY = 'CLEANUP_HISTORY';
-    case REGISTER_CHANNEL = 'REGISTER_CHANNEL';
+    case CLEANUP_HISTORY = 'cleanup-history';
+    case REGISTER_CHANNEL = 'register-channel';
 
     public function getValue(): RawString
     {
@@ -20,7 +20,7 @@ enum SlashCommand: string implements BaseEnum
     public function displayName(): RawString
     {
         return match ($this) {
-            self::CLEANUP_HISTORY => new RawString('履歴一括削除'),
+            self::CLEANUP_HISTORY => new RawString('一括削除'),
             self::REGISTER_CHANNEL => new RawString('チャンネル登録'),
         };
     }
@@ -28,7 +28,7 @@ enum SlashCommand: string implements BaseEnum
     public function getDescription(): Description
     {
         return match ($this) {
-            self::CLEANUP_HISTORY => new Description('過去ログの一括削除を行います'),
+            self::CLEANUP_HISTORY => new Description('直近100件のログを一括削除します'),
             self::REGISTER_CHANNEL => new Description('チャンネルを監視対象に追加'),
         };
     }

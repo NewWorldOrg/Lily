@@ -4,9 +4,15 @@ declare(strict_types=1);
 
 namespace Infra\Discord;
 
+use Discord\Builders\Components\Option;
+use Discord\Builders\Components\SelectMenu;
+use Discord\Builders\MessageBuilder;
 use Discord\Discord;
 use Discord\Exceptions\IntentException;
+use Discord\Helpers\Collection;
+use Discord\Parts\Channel\Channel;
 use Discord\Parts\Channel\Message;
+use Discord\Parts\Interactions\Interaction;
 use Discord\WebSockets\Intents;
 use Domain\DiscordBot\BotCommand;
 use Domain\DiscordBot\SlashCommands\SlashCommand;
@@ -47,6 +53,52 @@ class DiscordBotClient
             'intents' => Intents::getDefaultIntents() | Intents::GUILD_MEMBERS,
         ]);
 
+        $this->discord->listenCommand(SlashCommand::CLEANUP_HISTORY->getValue()->getRawValue(), function (Interaction $interaction) {
+            $channels = $interaction->guild->channels;
+
+            if (is_null($interaction->guild_id)) {
+                $interaction->respondWithMessage(MessageBuilder::new()->setContent('サーバ内でのみ使用できます。'), true);
+            }
+
+            if (is_null($channels)) {
+                $interaction->respondWithMessage(MessageBuilder::new()->setContent('利用可能なチャンネルが見つかりませんでした。'), true);
+            }
+
+            $selectMenu = SelectMenu::new();
+            $selectMenu
+                ->setPlaceholder('チャンネルを選択してください。')
+                ->setMaxValues(1)
+                ->setMinValues(1)
+                ->setCustomId(SlashCommand::CLEANUP_HISTORY->getValue()->getRawValue());
+
+            $channels->map(function (Channel $channel) use ($selectMenu) {
+                $isTextChannel = match ($channel->type) {
+                    Channel::TYPE_TEXT => true,
+                    default => false,
+                };
+
+                if (!$isTextChannel) {
+                    return;
+                }
+
+                $selectMenu->addOption(Option::new("#{$channel->name}", $channel->id));
+            });
+
+            $interaction->respondWithMessage(MessageBuilder::new()->addComponent($selectMenu), true);
+
+
+            $selectMenu->setListener(function (Interaction $interaction, Collection $options) {
+                $values = $options->map(fn (Option $option) => $option->getValue())->toArray();
+
+                $channel = $this->discord->getChannel($values[0]);
+
+                $channel->getMessageHistory(['limit' => 100])->done(function (Collection $messages) use ($channel) {
+                    $channel->deleteMessages($messages);
+                });
+
+            }, $this->discord);
+        });
+
         $this->discord->on('ready', function(Discord $discord) {
             $discord->on('message', function(Message $message) use ($discord) {
                 $this->message = $message;
@@ -75,6 +127,7 @@ class DiscordBotClient
                 return true;
             });
         });
+
         $this->discord->run();
     }
 
