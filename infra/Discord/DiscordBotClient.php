@@ -14,13 +14,22 @@ use Discord\Parts\Channel\Channel;
 use Discord\Parts\Channel\Message;
 use Discord\Parts\Interactions\Interaction;
 use Discord\WebSockets\Intents;
+use Domain\Channel\ChannelId;
+use Domain\Channel\ChannelRepository;
+use Domain\Channel\DiscordChannelId;
+use Domain\Common\CreatedAt;
 use Domain\DiscordBot\BotCommand;
 use Domain\DiscordBot\SlashCommands\SlashCommand;
+use Domain\Exception\NotFoundException;
+use Domain\Message\DiscordMessageId;
+use Domain\Message\MessageRepository;
 
 class DiscordBotClient
 {
     public function __construct(
         private readonly DiscordBotCommandSystem $discordBotCommandSystem,
+        private readonly ChannelRepository $channelRepository,
+        private readonly MessageRepository $messageRepository,
     ) {
     }
 
@@ -99,9 +108,80 @@ class DiscordBotClient
             }, $this->discord);
         });
 
+        $this->discord->listenCommand(SlashCommand::REGISTER_CHANNEL->getValue()->getRawValue(), function (Interaction $interaction) {
+            $channels = $interaction->guild->channels;
+
+            if (is_null($interaction->guild_id)) {
+                $interaction->respondWithMessage(MessageBuilder::new()->setContent('サーバ内でのみ使用できます。'), true);
+            }
+
+            if (is_null($channels)) {
+                $interaction->respondWithMessage(MessageBuilder::new()->setContent('利用可能なチャンネルが見つかりませんでした。'), true);
+            }
+
+            $selectMenu = SelectMenu::new();
+            $selectMenu
+                ->setPlaceholder('チャンネルを選択してください。')
+                ->setMaxValues(1)
+                ->setMinValues(1)
+                ->setCustomId(SlashCommand::REGISTER_CHANNEL->getValue()->getRawValue());
+
+            $channels->map(function (Channel $channel) use ($selectMenu) {
+                $isTextChannel = match ($channel->type) {
+                    Channel::TYPE_TEXT => true,
+                    default => false,
+                };
+
+                if (!$isTextChannel) {
+                    return;
+                }
+
+                $selectMenu->addOption(Option::new("#{$channel->name}", $channel->id));
+            });
+
+            $interaction->respondWithMessage(MessageBuilder::new()->addComponent($selectMenu), true);
+
+
+            $selectMenu->setListener(function (Interaction $interaction, Collection $options) {
+                $values = $options->map(fn (Option $option) => $option->getValue())->toArray();
+
+                $channel = $this->discord->getChannel($values[0]);
+
+               $this->channelRepository->create(new DiscordChannelId($channel->id));
+
+            }, $this->discord);
+
+            $interaction->respondWithMessage(MessageBuilder::new()->setContent('監視対象に追加しました'), true);
+        });
+
         $this->discord->on('ready', function(Discord $discord) {
+            $discord->getLoop()->addPeriodicTimer(1, function () use ($discord) {
+                $createdAt = CreatedAt::now()->subDay(1);
+
+                $messageList = $this->messageRepository->oneDayHasPassMessageList($createdAt);
+
+                $channelIdList = $messageList->getChannelIdList();
+
+                $channelIdList->map(function (ChannelId $channelId) use ($messageList) {
+                    $c = $this->channelRepository->get($channelId);
+                    $channel = $this->discord->getChannel($c->getDiscordChanelId()->getRawValue());
+
+                    $messageList->map(function (\Domain\Message\Message $message) use ($channel) {
+                        $channel->messages->fetch($message->getDiscordMessageId()->getRawValue())->done(
+                            function (Message $m) {
+                                $m->delete();
+                            }
+                        );
+                    });
+
+                    $this->messageRepository->deleteByDiscordMessageIdList($messageList->getDiscordMessageIdList());
+                });
+            });
             $discord->on('message', function(Message $message) use ($discord) {
                 $this->message = $message;
+
+                $this->audit($this->message);
+
                 $commandPrefix = substr($this->message->content, 0, 1);
 
                 if (!$this->commandPrefixChecker($commandPrefix) || $this->botCheck($this->message)) {
@@ -126,9 +206,31 @@ class DiscordBotClient
 
                 return true;
             });
+
+
         });
 
         $this->discord->run();
+    }
+
+    private function audit(Message $message): void
+    {
+        try{
+            $channel = $this->channelRepository->getByDiscordChannelId(new DiscordChannelId($message->channel_id));
+
+            if (
+                !$this->channelRepository->existsByDiscordChannelId(new DiscordChannelId($message->channel_id))
+            ) {
+                return;
+            }
+
+            $this->messageRepository->create(
+                $channel->getId(),
+                new DiscordMessageId($message->id),
+            );
+        } catch (NotFoundException) {
+            return;
+        }
     }
 
     /**

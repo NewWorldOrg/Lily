@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Infra\EloquentModels;
 
+use Domain\Channel\ChannelId;
+use Domain\Message\DiscordMessageId;
+use Domain\Message\MessageId;
 use Infra\EloquentModels\Model as AppModel;
 
 /**
@@ -33,4 +36,13 @@ class Message extends AppModel
     protected $guarded = [
         'id'
     ];
+
+    public function toDomain(): \Domain\Message\Message
+    {
+        return new \Domain\Message\Message(
+            new MessageId((int)$this->id),
+            new ChannelId((int)$this->channel_id),
+            new DiscordMessageId($this->discord_message_id),
+        );
+    }
 }
