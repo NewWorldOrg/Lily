@@ -193,7 +193,12 @@ class DiscordBotClient
                 $input = mb_convert_kana($input, 'rsa');
                 $commandName = mb_strstr($input, ' ', true) ?: '';
                 $cmd = BotCommand::makeFromDisplayName($commandName);
-                $args = $this->argSplitter($input) ?? $cmd->getCommandArgumentClass($this->argSplitter($input));
+                $args = $cmd->getCommandArgumentClass($this->argSplitter($input));
+
+                if (is_null($args)) {
+                    $this->discordBotCommandSystem->commandNotFound($discord, $this->message);
+                    return true;
+                }
 
                 match (true) {
                     $cmd->isRegisterDrug() => $this->discordBotCommandSystem->registerDrug($args, $discord, $this->message),
@@ -201,7 +206,6 @@ class DiscordBotClient
                     $cmd->isInitSlashCommands() => SlashCommand::toArray()->map(
                         fn (SlashCommand $slashCommand) => $this->initSlashCommands($discord, $slashCommand)
                     ),
-                    default => $this->discordBotCommandSystem->commandNotFound($discord, $this->message),
                 };
 
                 return true;

@@ -45,10 +45,11 @@ enum BotCommand: string implements BaseEnum
     }
 
     public function getCommandArgumentClass(array $commandArgs)
-    : RegisterDrugCommandArgument|MedicationCommandArgument {
+    : RegisterDrugCommandArgument|MedicationCommandArgument|null {
         return match ($this) {
             self::REGISTER_DRUG => new RegisterDrugCommandArgument($commandArgs),
             self::MEDICATION => new MedicationCommandArgument($commandArgs),
+            default => null,
         };
     }
 
