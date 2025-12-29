@@ -1,5 +1,5 @@
-FROM composer:2.8.2 AS composer-base
-FROM unit:php8.3 AS base
+FROM composer:2 AS composer-base
+FROM unit:php8.4 AS base
 
 COPY --from=composer-base /usr/bin/composer /usr/bin/composer
 WORKDIR /code
