@@ -12,6 +12,7 @@
         "ext-json": "*",
         "ext-mbstring": "*",
         "ext-zlib": "*",
+        "darkaonline/l5-swagger": "^9.0",
         "fyui001/courage": "^2.0",
         "guzzlehttp/guzzle": "^7.2",
         "jeroennoten/laravel-adminlte": "^3.14",
