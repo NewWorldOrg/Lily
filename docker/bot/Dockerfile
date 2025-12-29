@@ -1,5 +1,5 @@
 ## composer
-FROM composer:2.7.2 AS composer-cache
+FROM composer:2 AS composer-cache
 WORKDIR /code
 # copy only composer files for caching
 COPY composer.json composer.lock /code/
@@ -7,7 +7,7 @@ COPY composer.json composer.lock /code/
 # install deps(without generating autoloader)
 RUN composer install --no-scripts --no-autoloader --ignore-platform-reqs
 
-FROM php:8.3
+FROM php:8.4
 
 COPY --from=composer-cache /usr/bin/composer /usr/bin/composer
 
