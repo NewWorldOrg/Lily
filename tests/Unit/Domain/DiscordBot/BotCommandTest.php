@@ -34,10 +34,6 @@ class BotCommandTest extends TestCase
     public static function displayNameProvider() :array
     {
         return [
-            'hello' => [
-                new RawString('hello'),
-                BotCommand::HELLO
-            ],
             'registerDrug' => [
                 new RawString('薬物登録'),
                 BotCommand::REGISTER_DRUG,
@@ -64,10 +60,6 @@ class BotCommandTest extends TestCase
     public static function makeFromDisplayNameProvider(): array
     {
         return [
-            [
-                'hello',
-                BotCommand::HELLO,
-            ],
             [
                 '薬物登録',
                 BotCommand::REGISTER_DRUG,
