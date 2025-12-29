@@ -1,9 +1,10 @@
 includes:
-    - ./vendor/nunomaduro/larastan/extension.neon
+    - ./vendor/larastan/larastan/extension.neon
 parameters:
-    level: 2
+    level: max
+    excludePaths:
+        - app/Services/ServiceTrait.php
     paths:
+        - domain
+        - infra
         - app
-    ignoreErrors:
-        - '#Call to an undefined method \$this\(App\\Http\\Controllers\\Auth\\LoginController\)::fireLockoutEvent\(\).#'
-        - '#Call to an undefined method \$this\(App\\Http\\Controllers\\Auth\\LoginController\)::sendLockoutResponse\(\).#'
