@@ -1,0 +1,375 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Lily api v1",
+        "description": "This is a Lily api definition document.",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/drugs": {
+            "get": {
+                "tags": [
+                    "Drug"
+                ],
+                "summary": "薬を一覧で取得する",
+                "operationId": "907ee73355e8bf5327ba2ddc85fc4f80",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "ページ番号",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "各ページで返す個数",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/get_drug_list_responder"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Drug"
+                ],
+                "summary": "薬の作成",
+                "operationId": "afb1b002ceb453f0f7bc89d10202aa60",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/create_drug_request"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/200_empty"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/api_error_responder"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/drugs/{id}": {
+            "delete": {
+                "tags": [
+                    "Drug"
+                ],
+                "summary": "薬を削除する",
+                "operationId": "a2914312c1cf4241975713f0f7d3b4c2",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/base_responder"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/api_error_responder"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/drugs/{id}": {
+            "post": {
+                "tags": [
+                    "Drug"
+                ],
+                "summary": "薬の詳細",
+                "operationId": "af29db84fe72d2e69334ac68f42d972f",
+                "responses": {
+                    "200": {
+                        "description": "Successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/200_empty"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/api_error_responder"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "base_api_paginator": {
+                "properties": {
+                    "currentPage": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "lastPage": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "perPage": {
+                        "type": "integer",
+                        "example": 10
+                    },
+                    "total": {
+                        "type": "integer",
+                        "example": 100
+                    },
+                    "data": {
+                        "type": "object",
+                        "example": []
+                    }
+                },
+                "type": "object"
+            },
+            "drug_detail": {
+                "required": [
+                    "id",
+                    "name",
+                    "url"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "高田憂希"
+                    },
+                    "url": {
+                        "type": "string",
+                        "example": "https://example.com/"
+                    }
+                },
+                "type": "object"
+            },
+            "drug_list_result": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/base_api_paginator"
+                    }
+                ]
+            },
+            "api_error_responder": {
+                "type": "object",
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/base_responder"
+                    },
+                    {
+                        "properties": {
+                            "status": {
+                                "type": "boolean",
+                                "example": false
+                            },
+                            "message": {
+                                "type": "string"
+                            },
+                            "errors": {
+                                "properties": {
+                                    "type": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object",
+                                "example": {
+                                    "type": "See config/api_errors.php"
+                                }
+                            },
+                            "data": {
+                                "type": "object",
+                                "example": null
+                            }
+                        },
+                        "type": "object"
+                    }
+                ]
+            },
+            "base_responder": {
+                "required": [
+                    "status",
+                    "message",
+                    "errors",
+                    "data"
+                ],
+                "properties": {
+                    "status": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "高田憂希しか好きじゃない"
+                    },
+                    "errors": {
+                        "type": "string",
+                        "example": null
+                    },
+                    "data": {
+                        "type": "object",
+                        "example": null
+                    }
+                },
+                "type": "object"
+            },
+            "200_empty": {
+                "required": [
+                    "status",
+                    "message",
+                    "errors",
+                    "data"
+                ],
+                "type": "object",
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/base_responder"
+                    }
+                ]
+            },
+            "create_drug_request": {
+                "properties": {
+                    "drug_name": {
+                        "type": "string"
+                    },
+                    "url": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "create_drug_responder": {
+                "type": "object",
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/base_responder"
+                    },
+                    {
+                        "properties": {
+                            "data": {
+                                "properties": {
+                                    "drug": {
+                                        "$ref": "#/components/schemas/drug_detail"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "type": "object"
+                    }
+                ]
+            },
+            "get_drug_list_responder": {
+                "type": "object",
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/base_responder"
+                    },
+                    {
+                        "properties": {
+                            "data": {
+                                "properties": {
+                                    "drugs": {
+                                        "$ref": "#/components/schemas/drug_list_result"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "type": "object"
+                    }
+                ]
+            },
+            "get_drug_responder": {
+                "type": "object",
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/base_responder"
+                    },
+                    {
+                        "properties": {
+                            "data": {
+                                "properties": {
+                                    "drug": {
+                                        "$ref": "#/components/schemas/drug_detail"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "type": "object"
+                    }
+                ]
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Drug",
+            "description": "Drug"
+        }
+    ]
+}

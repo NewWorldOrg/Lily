@@ -179,6 +179,7 @@ return [
         App\Providers\DataBaseQueryLoggerServiceProvider::class,
         App\Providers\RepositoryServiceProvider::class,
         App\Providers\AdminLteServiceProvider::class,
+        L5Swagger\L5SwaggerServiceProvider::class,
     ],
 
     /*

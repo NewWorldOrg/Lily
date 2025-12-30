@@ -310,6 +310,19 @@ return [
             'icon' => 'oi oi-graph',
             'route' => 'admin.medication_histories.index',
         ],
+        [
+            'text' => 'システム設定',
+            'icon' => 'oi oi-cog',
+            'submenu' => [
+                [
+                    'text' => 'APIドキュメント(Swagger)',
+                    'route' => 'l5-swagger.default.api',
+                    'icon' => 'oi oi-terminal',
+                    'shift' => 'ml-4',
+                    'target' => '_blank',
+                ],
+            ],
+        ],
     ],
 
     /*

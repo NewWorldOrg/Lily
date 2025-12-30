@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Http\AuthTrait\AdminUserAuthenticationTrait;
 use App\Http\AuthTrait\UserAuthenticationTrait;
+use Domain\Common\Paginator\Paginate;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -20,7 +21,7 @@ abstract class Request extends FormRequest
     * @throw HttpResponseException
     * @see FormRequest::failedValidation()
     */
-   protected function failedValidation(Validator $validator)
+   protected function failedValidation(Validator $validator): void
    {
        $response['status']  = false;
        $response['message'] = $validator->errors()->toArray();
@@ -28,4 +29,12 @@ abstract class Request extends FormRequest
            response()->json($response, 422)
        );
    }
+
+    public function makePaginate(): Paginate
+    {
+        return Paginate::make(
+            $this->integer('page', 1),
+            $this->integer('per_page', 10),
+        );
+    }
 }

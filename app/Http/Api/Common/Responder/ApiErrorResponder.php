@@ -1,12 +1,45 @@
 <?php
 
-namespace App\Http\Responder;
+namespace App\Http\Api\Common\Responder;
 
 use Domain\Common\ListValue;
 use Illuminate\Http\JsonResponse;
+use OpenApi\Attributes\Property;
+use OpenApi\Attributes\Schema;
 
+#[Schema(
+    schema: 'api_error_responder',
+    allOf: [new Schema('#/components/schemas/base_responder')]
+)]
 class ApiErrorResponder extends BaseResponder
 {
+    #[Property(
+        property: 'status',
+        type: 'boolean',
+        example: false,
+    )]
+    #[Property(
+        property: 'message',
+        type: 'string',
+    )]
+    #[Property(
+        property: 'errors',
+        properties: [
+            new Property(
+                property: 'type',
+                type: 'string',
+            ),
+        ],
+        type: 'object',
+        example: [
+            'type' => 'See config/api_errors.php'
+        ]
+    )]
+    #[Property(
+        property: 'data',
+        type: 'object',
+        example: null,
+    )]
     private ListValue $response;
 
     public function __construct(string $key)

@@ -1,15 +1,15 @@
-name: tests
+name: unit-test
 on:
-  push:
+  pull_request:
     branches:
       - master
-  pull_request:
     types:
       - opened
       - synchronize
       - reopened
 jobs:
   phpunit:
+    name: unit test
     runs-on: ubuntu-latest
 
     services:
@@ -30,7 +30,6 @@ jobs:
       DB_USERNAME: root
       DB_PASSWORD: root
 
-
     steps:
       - uses: actions/checkout@v4
       - name: cache vendor
@@ -47,21 +46,10 @@ jobs:
           ini-values: opcache.enable_cli=1, opcache.jit=tracing, opcache.jit_buffer_size=64M
       - name: composer install
         if: steps.cache.outputs.cache-hit != 'true'
-        run: composer install
+        run: composer install -n --prefer-dist
       - name: composer dump autoload
         run: composer dump-autoload
-      - name: Setup node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-      - name: Build js
-        id: build-js
-        run: |
-          yarn
-          yarn build
-      - name: storage link
-        run: php artisan storage:link
       - name: migrate
         run: php artisan migrate --env=testing
       - name: test
-        run: ./vendor/bin/phpunit --testdox --colors=always
+        run: ./vendor/bin/phpunit --testsuite Unit --testdox --colors=always

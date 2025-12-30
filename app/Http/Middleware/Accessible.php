@@ -56,6 +56,7 @@ class Accessible
                 'admin.top_page',
                 'admin.drugs.*',
                 'admin.medication_histories.*',
+                'l5-swagger.*',
             ],
             AdminUserRole::ROLE_OPERATOR->getValue()->getRawValue() => [
                 'admin.auth.*',

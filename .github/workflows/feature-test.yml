@@ -1,0 +1,67 @@
+name: feature-test
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+jobs:
+  phpunit:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:9.1.0
+        ports:
+          - 3306:3306
+        options: --health-cmd "mysqladmin ping -h localhost" --health-interval 20s --health-timeout 10s --health-retries 10
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: test
+
+    env:
+      DB_CONNECTION: mysql
+      DB_HOST: 127.0.0.1
+      DB_PORT: 3306
+      DB_DATABASE: test
+      DB_USERNAME: root
+      DB_PASSWORD: root
+
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: cache vendor
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: ./vendor
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+      - name: Setup PHP with PECL extension
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          coverage: none
+          ini-values: opcache.enable_cli=1, opcache.jit=tracing, opcache.jit_buffer_size=64M
+      - name: composer install
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: composer install
+      - name: composer dump autoload
+        run: composer dump-autoload
+      - name: Setup node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Build js
+        id: build-js
+        run: |
+          yarn
+          yarn build
+      - name: storage link
+        run: php artisan storage:link
+      - name: migrate
+        run: php artisan migrate --env=testing
+      - name: test
+        run: ./vendor/bin/phpunit --testsuite Feature --testdox --colors=always

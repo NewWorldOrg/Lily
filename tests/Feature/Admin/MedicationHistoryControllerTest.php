@@ -24,7 +24,7 @@ class MedicationHistoryControllerTest extends TestCase
 
     public function testEdit()
     {
-        $this->get(route('admin.medication_histories.edit', $this->medicationHistory->getId()))->assertOk();
+        $this->get(route('admin.medication_histories.edit', 1))->assertOk();
     }
 
     public function testUpdate()
@@ -33,7 +33,7 @@ class MedicationHistoryControllerTest extends TestCase
             'amount' => 316,
         ];
 
-        $this->post(route('admin.medication_histories.update', $this->medicationHistory->getId()), $params)
+        $this->post(route('admin.medication_histories.update', 1), $params)
             ->assertRedirect(route('admin.medication_histories.index'))
             ->assertSessionHas('success');
     }

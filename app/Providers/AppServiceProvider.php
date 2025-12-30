@@ -34,7 +34,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         // 管理画面用のクッキー
-        if (request()->is('admin*')) {
+        if ($this->isNotApiPath()) {
             config(['session.cookie' => config('session.cookie_admin')]);
         }
 
@@ -43,5 +43,12 @@ class AppServiceProvider extends ServiceProvider
         if ($this->app->environment() === 'production') {
             \URL::forceScheme('https');
         }
+    }
+
+    protected function isNotApiPath(): bool
+    {
+        return request()->is('admin*') ||
+            request()->is('api/documentation') ||
+            request()->is('docs*');
     }
 }
