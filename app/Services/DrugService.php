@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\DataTransfer\Drug\DrugListResult;
 use App\DataTransfer\Drug\DrugPaginator;
 use App\Services\Service as AppService;
+use App\Services\Shared\ServiceResult;
 use Domain\Common\Paginator\Paginate;
 use Domain\Common\RawPositiveInteger;
 use Domain\Drug\Drug;
@@ -44,28 +46,21 @@ class DrugService extends AppService
         );
     }
 
-    public function getDrugList(): array
+    /**
+     * @param Paginate $paginate
+     * @return ServiceResult<DrugListResult>
+     */
+    public function getDrugList(Paginate $paginate): ServiceResult
     {
-        $drugList = $this->drugDomainService->getDrugList()
-            ->map(function(Drug $domain) {
-                return $domain->toArray();
-        })->toArray();
+        $drugList = $this->drugDomainService->getPaginator($paginate);
 
-        if (empty($drugList)) {
-            return [
-                'status' => false,
-                'errors' => [
-                    'key' => 'drug_notfound',
-                ],
-                'data' => null,
-            ];
-        }
+        $result = new DrugListResult(
+            $drugList,
+            $this->drugRepository->getCount(),
+            $paginate,
+        );
 
-        return [
-            'status' => true,
-            'errors' => null,
-            'data' => $drugList,
-        ];
+        return ServiceResult::success($result);
     }
 
     /**

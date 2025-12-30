@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Responder;
+namespace App\Http\Api\Common\Responder;
 
 use Domain\Common\ListValue;
 use Illuminate\Http\JsonResponse;
