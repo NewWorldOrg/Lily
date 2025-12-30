@@ -212,4 +212,19 @@ class DrugService extends AppService
             ];
         }
     }
+
+    /**
+     * @param DrugId $id
+     * @return ServiceResult<null>
+     */
+    public function delete(DrugId $id): ServiceResult
+    {
+        try {
+            $this->drugDomainService->deleteDrug($id);
+
+            return ServiceResult::success(null);
+        } catch (NotFoundException) {
+            return ServiceResult::fail(ServiceError::NotFound);
+        }
+    }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Api\Drug\Actions\CreateDrugAction;
+use App\Http\Api\Drug\Actions\DeleteDrugAction;
 use App\Http\Api\Drug\Actions\GetDrugAction;
 use App\Http\Api\Drug\Actions\GetDrugListAction;
 
@@ -24,6 +25,7 @@ Route:: group([], function() {
     ], function() {
         Route::get('/', GetDrugListAction::class)->name('api.drugs.index');
         Route::post('/', CreateDrugAction::class)->name('api.drugs.create');
-        Route::get('/{drugId}', GetDrugAction::class)->name('api.drugs.show');
+        Route::get('/{id}', GetDrugAction::class)->name('api.drugs.show');
+        Route::delete('/{id}', DeleteDrugAction::class)->name('api.drugs.delete');
     });
 });

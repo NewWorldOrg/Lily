@@ -15,13 +15,8 @@ use OpenApi\Attributes\RequestBody;
 use OpenApi\Attributes\Response;
 
 #[Post(
-    path: '/drugs',
-    summary: '薬の作成',
-    requestBody: new RequestBody(
-        content: new JsonContent(
-            ref: '#/components/schemas/create_drug_request'
-        )
-    ),
+    path: '/drugs/{id}',
+    summary: '薬の詳細',
     tags: ['Drug'],
     responses: [
         new Response(
