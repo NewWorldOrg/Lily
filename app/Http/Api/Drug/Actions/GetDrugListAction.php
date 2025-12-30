@@ -14,6 +14,36 @@ use OpenApi\Attributes\Parameter;
 use OpenApi\Attributes\Response;
 use OpenApi\Attributes\Schema;
 
+#[Get(
+    path: '/drugs',
+    summary: '薬を一覧で取得する',
+    tags: ['Drug'],
+    parameters: [
+        new Parameter(
+            name: 'page',
+            description: 'ページ番号',
+            in: 'query',
+            required: false,
+            schema: new Schema(type: 'integer'),
+        ),
+        new Parameter(
+            name: 'per_page',
+            description: '各ページで返す個数',
+            in: 'query',
+            required: false,
+            schema: new Schema(type: 'integer'),
+        ),
+    ],
+    responses: [
+        new Response(
+            response: 200,
+            description: 'success',
+            content: new JsonContent(
+                ref: '#/components/schemas/get_drug_list_responder',
+            )
+        )
+    ]
+)]
 class GetDrugListAction extends Controller
 {
     public function __construct(private DrugService $drugService)
@@ -21,36 +51,6 @@ class GetDrugListAction extends Controller
         parent::__construct();
     }
 
-    #[Get(
-        path: '/drugs',
-        summary: '薬を一覧で取得する',
-        tags: ['Drug'],
-        parameters: [
-            new Parameter(
-                name: 'page',
-                description: 'ページ番号',
-                in: 'query',
-                required: false,
-                schema: new Schema(type: 'integer'),
-            ),
-            new Parameter(
-                name: 'per_page',
-                description: '各ページで返す個数',
-                in: 'query',
-                required: false,
-                schema: new Schema(type: 'integer'),
-            ),
-        ],
-        responses: [
-            new Response(
-                response: 200,
-                description: 'success',
-                content: new JsonContent(
-                    ref: '#/components/schemas/get_drug_list_responder',
-                )
-            )
-        ]
-    )]
     public function __invoke(GetDrugListRequest $request): DrugListResponder
     {
         $result = $this->drugService->getDrugList($request->makePaginate());

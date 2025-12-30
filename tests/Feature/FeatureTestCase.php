@@ -12,24 +12,23 @@ use Domain\AdminUser\AdminUserStatus;
 use Domain\Drug\Drug;
 use Domain\MedicationHistory\MedicationDate;
 use Domain\MedicationHistory\MedicationHistory;
-use Domain\User\DefinitiveRegisterToken\DefinitiveRegisterToken;
-use Domain\User\UserStatus;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Infra\EloquentModels\AdminUser as AdminUserModel;
 use Infra\EloquentModels\Drug as DrugModel;
 use Infra\EloquentModels\MedicationHistory as MedicationHistoryModel;
-use Infra\EloquentModels\User as UserModel;
 use Infra\EloquentRepository\AdminUserRepository;
 use Tests\TestCase;
 
 class FeatureTestCase extends TestCase
 {
+    use RefreshDatabase;
+
     private AdminUserRepository $adminUserRepository;
 
     protected AdminUserDomain $adminUser;
     protected Drug $drug;
     protected MedicationHistory $medicationHistory;
-    protected DefinitiveRegisterToken $definitiveRegisterToken;
 
     public function setUp(): void
     {

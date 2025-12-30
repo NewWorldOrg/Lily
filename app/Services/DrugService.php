@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\DataTransfer\Drug\DrugDetail;
 use App\DataTransfer\Drug\DrugListResult;
 use App\DataTransfer\Drug\DrugPaginator;
 use App\Services\Service as AppService;
+use App\Services\Shared\ServiceError;
 use App\Services\Shared\ServiceResult;
 use Domain\Common\Paginator\Paginate;
 use Domain\Common\RawPositiveInteger;
@@ -67,26 +69,17 @@ class DrugService extends AppService
      * Find a drug
      *
      * @param DrugId $drugId
-     * @return array
+     * @return ServiceResult<DrugDetail>
      */
-    public function show(DrugId $drugId): array
+    public function getDrug(DrugId $drugId): ServiceResult
     {
         try {
             $drug = $this->drugDomainService->show($drugId);
+            $drugDetail = new DrugDetail($drug);
 
-            return [
-                'status' => true,
-                'errors' => null,
-                'data' => $drug->toArray(),
-            ];
-        } catch (NotFoundException $e) {
-            return [
-                'status' => false,
-                'errors' => [
-                    'key' => 'drug_notfound',
-                ],
-                'data' => null
-            ];
+            return ServiceResult::success($drugDetail);
+        } catch (NotFoundException) {
+            return ServiceResult::fail(ServiceError::NotFound);
         }
     }
 
@@ -122,31 +115,16 @@ class DrugService extends AppService
      *
      * @param DrugName $drugName
      * @param DrugUrl $url
-     * @return array
+     * @return ServiceResult<DrugDetail>
      */
-    public function createDrug(DrugName $drugName, DrugUrl $url): array
+    public function createDrug(DrugName $drugName, DrugUrl $url): ServiceResult
     {
-        $result = $this->drugDomainService->createDrug(
+        $drug = $this->drugDomainService->createDrug(
             $drugName,
             $url,
         );
 
-        if (empty($result)) {
-            return [
-                'status' => false,
-                'errors' => [
-                    'key' => 'failed_register_drug',
-                ],
-                'data' => null,
-            ];
-        }
-
-        return [
-            'status' => true,
-            'message' => '',
-            'errors' => null,
-            'data' => $result,
-        ];
+      return ServiceResult::success(new DrugDetail($drug));
     }
 
     /**

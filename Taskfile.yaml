@@ -66,9 +66,6 @@ tasks:
   up:
     cmd: docker compose up -d
 
-  up-mutagen:
-    cmd: mutagen-compose -f compose.yml -f compose.mutagen.yml up -d
-
   down:
     cmd: docker compose down
 

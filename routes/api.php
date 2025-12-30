@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Api\Drug\Actions\CreateDrugAction;
+use App\Http\Api\Drug\Actions\GetDrugAction;
 use App\Http\Api\Drug\Actions\GetDrugListAction;
 
 /*
@@ -21,7 +23,7 @@ Route:: group([], function() {
         'prefix' => 'drugs'
     ], function() {
         Route::get('/', GetDrugListAction::class)->name('api.drugs.index');
-        Route::post('/', 'DrugController@create')->name('api.drugs.create');
-        Route::get('/{drugId}', 'DrugController@show')->name('api.drugs.show');
+        Route::post('/', CreateDrugAction::class)->name('api.drugs.create');
+        Route::get('/{drugId}', GetDrugAction::class)->name('api.drugs.show');
     });
 });
