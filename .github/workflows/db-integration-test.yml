@@ -50,5 +50,7 @@ jobs:
         run: composer dump-autoload
       - name: storage link
         run: php artisan storage:link
+      - name: migrate
+        run: php artisan migrate --env=testing
       - name: test
         run: ./vendor/bin/phpunit --testsuite DbIntegration --testdox --colors=always
