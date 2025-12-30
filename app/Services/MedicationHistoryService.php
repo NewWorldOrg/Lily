@@ -7,12 +7,16 @@ namespace App\Services;
 use App\DataTransfer\MedicationHistory\MedicationHistoryDetail;
 use App\DataTransfer\MedicationHistory\MedicationHistoryDetailList;
 use App\DataTransfer\MedicationHistory\MedicationHistoryDetailPaginator;
+use App\Services\Shared\ServiceError;
+use App\Services\Shared\ServiceResult;
 use Domain\Common\Paginator\Paginate;
 use Domain\Drug\DrugDomainService;
 use Domain\Drug\DrugName;
+use Domain\Exception\NotFoundException;
 use Domain\MedicationHistory\MedicationHistory;
 use Domain\MedicationHistory\Amount;
 use Domain\MedicationHistory\MedicationHistoryDomainService;
+use Domain\MedicationHistory\MedicationHistoryId;
 use Domain\MedicationHistory\MedicationHistoryRepository;
 use Domain\MedicationHistory\UserId;
 use App\Services\Service as AppService;
@@ -23,7 +27,25 @@ class MedicationHistoryService extends AppService
         private MedicationHistoryDomainService $medicationHistoryDomainService,
         private DrugDomainService $drugDomainService,
         private MedicationHistoryRepository $medicationHistoryRepository,
-    ){
+    ) {
+    }
+
+    /**
+     * @param MedicationHistoryId $id
+     * @return ServiceResult<MedicationHistoryDetail>
+     */
+    public function getDetail(MedicationHistoryId $id): ServiceResult
+    {
+        try {
+            $medicationHistory = $this->medicationHistoryRepository->get($id);
+            $drug = $this->drugDomainService->get($medicationHistory->getDrugId());
+
+            $medicationHistoryDetail = new MedicationHistoryDetail($medicationHistory, $drug);
+
+            return ServiceResult::success($medicationHistoryDetail);
+        } catch (NotFoundException) {
+            return ServiceResult::fail(ServiceError::NotFound);
+        }
     }
 
     /**
@@ -40,7 +62,7 @@ class MedicationHistoryService extends AppService
 
         foreach ($result as $key => $item) {
             /** @var MedicationHistory $item */
-            $drug = $this->drugDomainService->show($item->getDrugId());
+            $drug = $this->drugDomainService->get($item->getDrugId());
             $medicationHistoryDetailList[$key] = new MedicationHistoryDetail($item, $drug);
         }
 

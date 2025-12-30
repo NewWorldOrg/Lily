@@ -51,6 +51,11 @@ readonly class MedicationHistory
         return $this->createdAt;
     }
 
+    public function getUpdatedAt(): UpdatedAt
+    {
+        return $this->updatedAt;
+    }
+
     public function toArray(): array
     {
         return [

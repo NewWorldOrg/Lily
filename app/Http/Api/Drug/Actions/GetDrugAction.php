@@ -9,12 +9,11 @@ use App\Http\Api\Drug\Responders\GetDrugResponder;
 use App\Http\Controllers\Controller;
 use App\Services\DrugService;
 use Domain\Drug\DrugId;
+use OpenApi\Attributes\Get;
 use OpenApi\Attributes\JsonContent;
-use OpenApi\Attributes\Post;
-use OpenApi\Attributes\RequestBody;
 use OpenApi\Attributes\Response;
 
-#[Post(
+#[Get(
     path: '/drugs/{id}',
     summary: '薬の詳細',
     tags: ['Drug'],
@@ -23,7 +22,7 @@ use OpenApi\Attributes\Response;
             response: 200,
             description: 'Successful',
             content: new JsonContent(
-                ref: '#/components/schemas/200_empty'
+                ref: '#/components/schemas/get_drug_responder'
             )
         ),
         new Response(

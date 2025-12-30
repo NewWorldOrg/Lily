@@ -26,6 +26,17 @@ class MedicationHistoryRepository implements MedicationHistoryRepositoryInterfac
         'drug',
     ];
 
+    public function get(MedicationHistoryId $id): MedicationHistory
+    {
+        $model = MedicationHistoryModel::with(self::WITH_MODEL)->find($id->getRawValue());
+
+        if (!$model) {
+            throw new NotFoundException();
+        }
+
+        return $model->toDomain();
+    }
+
     public function getPaginator(Paginate $paginate): MedicationHistoryList
     {
         $builder = MedicationHistoryModel::with(self::WITH_MODEL)
