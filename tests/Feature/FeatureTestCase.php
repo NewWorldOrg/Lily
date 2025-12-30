@@ -30,15 +30,13 @@ class FeatureTestCase extends TestCase
     protected Drug $drug;
     protected MedicationHistory $medicationHistory;
 
+    protected bool $seed = true;
+
     public function setUp(): void
     {
         parent::setUp();
 
         $this->adminUserRepository = $this->app->make(AdminUserRepository::class);
-
-        $this->createAdminUser();
-        $this->createDrug();
-        $this->createMedicationHistory();
     }
 
     public function adminLogin(): void

@@ -1,3 +1,9 @@
+<?php
+/**
+ * @var Domain\Drug\Drug $drug
+ */
+?>
+
 @extends('vendor.adminlte.page')
 
 @section('content-header')
@@ -16,15 +22,15 @@
 @endsection
 
 @section('content')
-    <form action="{{ route('admin.drugs.update', $drug) }}" method="POST">
+    <form action="{{ route('admin.drugs.update', $drug->getId()->getRawValue()) }}" method="POST">
         @csrf
         <div class="form-group info">
             <label>薬物名</label>
-            <input name="drug_name" value="{{ old('drug_name', $drug->drug_name) }}" class="form-control " placeholder="Enter drug name" required/>
+            <input name="drug_name" value="{{ old('drug_name', $drug->getName()->getRawValue()) }}" class="form-control " placeholder="Enter drug name" required/>
         </div>
         <div class="form-group info">
             <label>URL (wiki)</label>
-            <input name="url" value="{{ old('url', $drug->url) }}" class="form-control " placeholder="Enter URL" required/>
+            <input name="url" value="{{ old('url', $drug->getUrl()->getRawValue()) }}" class="form-control " placeholder="Enter URL" required/>
         </div>
         <button type="submit" class="btn btn-round btn-info">追加</button>
     </form>

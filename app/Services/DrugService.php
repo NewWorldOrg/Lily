@@ -31,6 +31,11 @@ class DrugService extends AppService
     ) {
     }
 
+    public function get(DrugId $id): Drug
+    {
+        return $this->drugRepository->get($id);
+    }
+
     /**
      * Paginate Drugs
      *
@@ -139,8 +144,7 @@ class DrugService extends AppService
         DrugId $drugId,
         DrugName $drugName,
         DrugUrl $drugUrl,
-    ): array
-    {
+    ): array {
 
         $result = $this->drugDomainService->updateDrug(
             new Drug(

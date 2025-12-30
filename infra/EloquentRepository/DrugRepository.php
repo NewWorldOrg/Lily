@@ -20,7 +20,7 @@ use Infra\EloquentModels\Drug as DrugModel;
 
 class DrugRepository implements DrugRepositoryInterface
 {
-    public function show(DrugId $drugId): Drug
+    public function get(DrugId $drugId): Drug
     {
         $model = DrugModel::where(['id' => $drugId->getRawValue()])->first();
 

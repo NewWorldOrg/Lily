@@ -48,8 +48,14 @@ tasks:
   test_seed:
     cmd: docker compose exec app php artisan migrate:fresh --seed --drop-views --env=testing
 
-  test:
-    cmd: docker compose exec app bash -c "vendor/bin/phpunit --testdox --colors=always"
+  test_feature:
+    cmd: docker compose exec app bash -c "vendor/bin/phpunit --testsuite Feature --testdox --colors=always"
+
+  test_unit:
+    cmd: docker compose exec app bash -c "vendor/bin/phpunit --testsuite Unit --testdox --colors=always"
+
+  test_db_integration:
+    cmd: docker compose exec app bash -c "vendor/bin/phpunit --testsuite DbIntegration --testdox --colors=always"
 
   bash:
     cmd: docker compose exec app bash

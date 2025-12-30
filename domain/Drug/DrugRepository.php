@@ -8,7 +8,7 @@ use Domain\Common\Paginator\Paginate;
 
 interface DrugRepository
 {
-    public function show(DrugId $drugId): Drug;
+    public function get(DrugId $drugId): Drug;
     public function getDrugs(): DrugList;
     public function getCount(): DrugCount;
     public function findDrugByName(DrugName $drugName): Drug;
