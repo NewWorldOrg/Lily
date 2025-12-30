@@ -6,11 +6,12 @@ namespace App\Services;
 
 use App\DataTransfer\MedicationHistory\MedicationHistoryDetail;
 use App\DataTransfer\MedicationHistory\MedicationHistoryDetailList;
-use App\DataTransfer\MedicationHistory\MedicationHistoryDetailPaginator;
+use App\DataTransfer\MedicationHistory\MedicationHistoryListResult;
 use App\Services\Shared\ServiceError;
 use App\Services\Shared\ServiceResult;
 use Domain\Common\Paginator\Paginate;
 use Domain\Drug\DrugDomainService;
+use Domain\Drug\DrugHashMap;
 use Domain\Drug\DrugName;
 use Domain\Exception\NotFoundException;
 use Domain\MedicationHistory\MedicationHistory;
@@ -48,13 +49,35 @@ class MedicationHistoryService extends AppService
         }
     }
 
+    public function getMedicationHistoryList(Paginate $paginate, UserId $userId): ServiceResult
+    {
+        $result = $this->medicationHistoryRepository->getPaginatorByUserId($paginate, $userId);
+        $drugList = $this->drugDomainService->getDrugList();
+        $drugHashMap = new DrugHashMap($drugList);
+        $medicationHistoryDetailList = new MedicationHistoryDetailList([]);
+
+        foreach ($result as $key => $item) {
+            /** @var MedicationHistory $item */
+            $drug = $drugHashMap->get((string)$item->getDrugId());
+            $medicationHistoryDetailList[$key] = new MedicationHistoryDetail($item, $drug);
+        }
+
+        $paginator = new MedicationHistoryListResult(
+            $medicationHistoryDetailList,
+            $this->medicationHistoryRepository->getCount(),
+            $paginate,
+        );
+
+        return ServiceResult::success($paginator);
+    }
+
     /**
      * Get all medication history
      *
      * @param Paginate $paginate
-     * @return MedicationHistoryDetailPaginator
+     * @return MedicationHistoryListResult
      */
-    public function getMedicationHistoryPaginator(Paginate $paginate): MedicationHistoryDetailPaginator
+    public function getMedicationHistoryPaginator(Paginate $paginate): MedicationHistoryListResult
     {
         $result = $this->medicationHistoryDomainService->getPaginate($paginate);
 
@@ -66,32 +89,11 @@ class MedicationHistoryService extends AppService
             $medicationHistoryDetailList[$key] = new MedicationHistoryDetail($item, $drug);
         }
 
-        return new MedicationHistoryDetailPaginator(
+        return new MedicationHistoryListResult(
             $medicationHistoryDetailList,
             $this->medicationHistoryRepository->getCount(),
             $paginate,
         );
-    }
-
-    public function createMedicationHistory(UserId $userId, DrugName $drugName, Amount $amount): array
-    {
-        $drug = $this->drugDomainService->findDrugByName($drugName);
-        $result = $this->medicationHistoryDomainService->create($userId, $drug->getId(), $amount);
-        if (empty($result->toArray())) {
-            return [
-                'status' => false,
-                'errors' => [
-                    'key' => 'failed_create_medication_history',
-                ],
-                'data' => null,
-            ];
-        }
-
-        return [
-            'status' => true,
-            'errors' => null,
-            'data' => $result->toArray(),
-        ];
     }
 
     /**

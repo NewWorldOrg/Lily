@@ -51,6 +51,21 @@ class MedicationHistoryRepository implements MedicationHistoryRepositoryInterfac
         })->toArray());
     }
 
+    public function getPaginatorByUserId(Paginate $paginate, UserId $userId): MedicationHistoryList
+    {
+        $builder = MedicationHistoryModel::with(self::WITH_MODEL)
+            ->where(['user_id' => $userId->getRawValue()])
+            ->orderBy('id', OrderKey::DESC->getValue()->getRawValue())
+            ->limit($paginate->getLimit()->getRawValue())
+            ->offset($paginate->offset()->getRawValue());
+
+        $collection = $builder->get();
+
+        return new MedicationHistoryList($collection->map(function(MedicationHistoryModel $model) {
+            return $model->toDomain();
+        })->toArray());
+    }
+
     public function getCount(): MedicationHistoryCount
     {
         $query = MedicationHistoryModel::query();

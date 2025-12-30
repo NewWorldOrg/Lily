@@ -13,6 +13,7 @@ use Domain\Drug\DrugUrl;
 use Domain\MedicationHistory\Amount;
 use Domain\MedicationHistory\MedicationHistory;
 use Domain\MedicationHistory\MedicationHistoryId;
+use Domain\MedicationHistory\UserId;
 use OpenApi\Attributes\Property;
 use OpenApi\Attributes\Schema;
 
@@ -21,6 +22,8 @@ class MedicationHistoryDetail
 {
     #[Property(type: 'integer', example: 1)]
     public MedicationHistoryId $id;
+    #[Property(type: 'integer', example: 930316)]
+    public UserId $userId;
     #[Property(type: 'integer', example: 10)]
     public Amount $amount;
     #[Property(type: 'integer', example: 1)]
@@ -35,15 +38,16 @@ class MedicationHistoryDetail
     public UpdatedAt $updatedAt;
 
     public function __construct(
-        private readonly MedicationHistory $medicationHistory,
-        private readonly Drug $drug,
-    ){
-        $this->id = $this->medicationHistory->getId();
-        $this->amount = $this->medicationHistory->getAmount();
-        $this->drugId = $this->drug->getId();
-        $this->drugName = $this->drug->getName();
-        $this->drugUrl = $this->drug->getUrl();
-        $this->createdAt = $this->medicationHistory->getCreatedAt();
-        $this->updatedAt = $this->medicationHistory->getUpdatedAt();
+        MedicationHistory $medicationHistory,
+        Drug $drug,
+    ) {
+        $this->id = $medicationHistory->getId();
+        $this->userId = $medicationHistory->getUserId();
+        $this->amount = $medicationHistory->getAmount();
+        $this->drugId = $drug->getId();
+        $this->drugName = $drug->getName();
+        $this->drugUrl = $drug->getUrl();
+        $this->createdAt = $medicationHistory->getCreatedAt();
+        $this->updatedAt = $medicationHistory->getUpdatedAt();
     }
 }
