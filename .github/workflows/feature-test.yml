@@ -1,4 +1,4 @@
-name: tests
+name: feature-test
 on:
   push:
     branches:
@@ -64,4 +64,4 @@ jobs:
       - name: migrate
         run: php artisan migrate --env=testing
       - name: test
-        run: ./vendor/bin/phpunit --testdox --colors=always
+        run: ./vendor/bin/phpunit --testsuite Feature --testdox --colors=always
