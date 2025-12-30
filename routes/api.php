@@ -21,8 +21,7 @@ Route:: group([], function() {
         'prefix' => 'drugs'
     ], function() {
         Route::get('/', GetDrugListAction::class)->name('api.drugs.index');
+        Route::post('/', 'DrugController@create')->name('api.drugs.create');
         Route::get('/{drugId}', 'DrugController@show')->name('api.drugs.show');
-        Route::get('/show/name', 'DrugController@showName')->name('api.drugs.show.name');
-        Route::post('/create', 'DrugController@create')->name('api.drugs.create');
     });
 });

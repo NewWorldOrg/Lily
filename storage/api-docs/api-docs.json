@@ -1,0 +1,141 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Lily api v1",
+        "description": "This is a Lily api definition document.",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/drugs": {
+            "get": {
+                "tags": [
+                    "Drug"
+                ],
+                "summary": "薬を一覧で取得する",
+                "operationId": "5117e37f08b7e927fd5e1f9128d98989",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "ページ番号",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "各ページで返す個数",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/get_drug_list_responder"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "base_api_paginator": {
+                "properties": {
+                    "currentPage": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "lastPage": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "perPage": {
+                        "type": "integer",
+                        "example": 10
+                    },
+                    "total": {
+                        "type": "integer",
+                        "example": 100
+                    },
+                    "data": {
+                        "type": "object",
+                        "example": []
+                    }
+                },
+                "type": "object"
+            },
+            "drug_list_result": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/base_api_paginator"
+                    }
+                ]
+            },
+            "base_responder": {
+                "required": [
+                    "status",
+                    "message",
+                    "errors",
+                    "data"
+                ],
+                "properties": {
+                    "status": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "高田憂希しか好きじゃない"
+                    },
+                    "errors": {
+                        "type": "string",
+                        "example": null
+                    },
+                    "data": {
+                        "type": "object",
+                        "example": null
+                    }
+                },
+                "type": "object"
+            },
+            "get_drug_list_responder": {
+                "type": "object",
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/base_responder"
+                    },
+                    {
+                        "properties": {
+                            "data": {
+                                "properties": {
+                                    "drugs": {
+                                        "$ref": "#/components/schemas/drug_list_result"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "type": "object"
+                    }
+                ]
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Drug",
+            "description": "Drug"
+        }
+    ]
+}

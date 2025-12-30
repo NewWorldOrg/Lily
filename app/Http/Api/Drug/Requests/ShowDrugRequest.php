@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Requests\Api\Drugs;
+namespace App\Http\Api\Drug\Requests;
 
 use App\Http\Api\Shered\Request\ApiRequest;
 use Domain\Drug\DrugId;

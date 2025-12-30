@@ -30,7 +30,7 @@ use OpenApi\Attributes\Schema;
         ),
         new Property(
             property: 'data',
-            type: 'array',
+            type: 'object',
             example: null,
         ),
     ],
