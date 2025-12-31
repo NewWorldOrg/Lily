@@ -4,6 +4,9 @@ use App\Http\Api\Drug\Actions\CreateDrugAction;
 use App\Http\Api\Drug\Actions\DeleteDrugAction;
 use App\Http\Api\Drug\Actions\GetDrugAction;
 use App\Http\Api\Drug\Actions\GetDrugListAction;
+use App\Http\Api\MedicationHistory\Actions\CreateMedicationHistoryAction;
+use App\Http\Api\MedicationHistory\Actions\GetMedicationHistoryAction;
+use App\Http\Api\MedicationHistory\Actions\GetMedicationHistoryListAction;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,5 +30,13 @@ Route:: group([], function() {
         Route::post('/', CreateDrugAction::class)->name('api.drugs.create');
         Route::get('/{id}', GetDrugAction::class)->name('api.drugs.show');
         Route::delete('/{id}', DeleteDrugAction::class)->name('api.drugs.delete');
+    });
+
+    Route::group([
+        'prefix' => 'medication_histories'
+    ], function() {
+        Route::get('/', GetMedicationHistoryListAction::class)->name('api.medication_histories.index');
+        Route::post('/', CreateMedicationHistoryAction::class)->name('api.medication_histories.create');
+        Route::get('/{id}', GetMedicationHistoryAction::class)->name('api.medication_histories.detail');
     });
 });

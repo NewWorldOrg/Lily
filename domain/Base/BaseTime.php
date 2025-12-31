@@ -64,8 +64,13 @@ abstract class BaseTime extends CoInteger
         return new static (strtotime('-' . $second . 'second', $this->timestamp));
     }
 
+    public function getIsoString(): string
+    {
+        return date('c', $this->timestamp);
+    }
+
     public function __toString(): string
     {
-        return $this->getDisplay();
+        return $this->getDetail();
     }
 }

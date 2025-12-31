@@ -24,13 +24,13 @@
     @foreach($medicationHistories as $item)
         <?php /** @var App\DataTransfer\MedicationHistory\MedicationHistoryDetail $item */ ?>
     <tr>
-        <td>{{ $item->getMedicationHistory()->getId()->getRawValue() }}</td>
-        <td>{{ $item->getMedicationHistory()->getUserId()->getRawValue() }}</td>
-        <td>{{ $item->getDrug()->getName()->getRawValue()}}</td>
-        <td>{{ $item->getMedicationHistory()->getAmount()->getRawValue() }}</td>
-        <td>{{ $item->getMedicationHistory()->getCreatedAt()->getDetail() }}</td>
+        <td>{{ $item->id->getRawValue() }}</td>
+        <td>{{ $item->userId->getRawValue() }}</td>
+        <td>{{ $item->drugName->getRawValue()}}</td>
+        <td>{{ $item->amount->getRawValue() }}</td>
+        <td>{{ $item->createdAt->getDetail() }}</td>
         <td class="td-actions text-right">
-            <a href="{{ route('admin.medication_histories.edit', $item->getMedicationHistory()->getId()->getRawValue()) }}" class="btn btn-success btn-round" rel="tooltip" data-placement="bottom" title="Edit">
+            <a href="{{ route('admin.medication_histories.edit', $item->id->getRawValue()) }}" class="btn btn-success btn-round" rel="tooltip" data-placement="bottom" title="Edit">
                 <span class="oi oi-pencil"></span>
             </a>
         </td>

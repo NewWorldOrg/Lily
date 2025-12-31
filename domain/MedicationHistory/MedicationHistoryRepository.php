@@ -10,7 +10,9 @@ use Domain\Drug\DrugId;
 
 interface MedicationHistoryRepository
 {
+    public function get(MedicationHistoryId $id): MedicationHistory;
     public function getPaginator(Paginate $paginate): MedicationHistoryList;
+    public function getPaginatorByUserId(Paginate $paginate, UserId $userId): MedicationHistoryList;
     public function getCount(): MedicationHistoryCount;
     public function getCountMedicationTake(DrugId $drugId): RawPositiveInteger;
     public function create(
