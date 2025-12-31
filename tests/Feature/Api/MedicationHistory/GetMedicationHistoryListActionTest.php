@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Api\MedicationHistory;
+namespace Tests\Feature\Api\MedicationHistory;
 
 use Tests\Feature\FeatureTestCase;
 

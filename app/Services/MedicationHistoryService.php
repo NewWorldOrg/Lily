@@ -12,8 +12,10 @@ use App\Services\Shared\ServiceResult;
 use Domain\Common\Paginator\Paginate;
 use Domain\Drug\DrugDomainService;
 use Domain\Drug\DrugHashMap;
+use Domain\Drug\DrugId;
 use Domain\Drug\DrugName;
 use Domain\Exception\NotFoundException;
+use Domain\MedicationHistory\MedicationDate;
 use Domain\MedicationHistory\MedicationHistory;
 use Domain\MedicationHistory\Amount;
 use Domain\MedicationHistory\MedicationHistoryDomainService;
@@ -107,4 +109,29 @@ class MedicationHistoryService extends AppService
         return $this->medicationHistoryDomainService->update($medicationHistory);
     }
 
+    /**
+     * @param DrugId $drugId
+     * @param UserId $userId
+     * @param Amount $amount
+     * @param MedicationDate $medicationDate
+     * @return ServiceResult<MedicationHistoryDetail>
+     */
+    public function createMedicationHistory(
+        DrugId $drugId,
+        UserId $userId,
+        Amount $amount,
+        MedicationDate $medicationDate,
+    ): ServiceResult {
+        $medicationHistory = $this->medicationHistoryDomainService->create(
+            $userId,
+            $drugId,
+            $amount,
+            $medicationDate,
+        );
+        $drug = $this->drugDomainService->get($medicationHistory->getDrugId());
+
+        $result = new MedicationHistoryDetail($medicationHistory, $drug);
+
+        return ServiceResult::success($result);
+    }
 }
