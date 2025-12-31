@@ -14,7 +14,7 @@ use OpenApi\Attributes\RequestBody;
 use OpenApi\Attributes\Response;
 
 #[Post(
-    path: '/drugs',
+    path: '/api/drugs',
     summary: '薬の作成',
     requestBody: new RequestBody(
         content: new JsonContent(

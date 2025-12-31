@@ -11,12 +11,23 @@ use App\Services\MedicationHistoryService;
 use Domain\MedicationHistory\MedicationHistoryId;
 use OpenApi\Attributes\Get;
 use OpenApi\Attributes\JsonContent;
+use OpenApi\Attributes\Parameter;
 use OpenApi\Attributes\Response;
+use OpenApi\Attributes\Schema;
 
 #[Get(
-    path: '/medication_histories',
+    path: '/api/medication_histories/{id}',
     summary: '服薬履歴の詳細',
     tags: ['MedicationHistory'],
+    parameters: [
+        new Parameter(
+            name: 'id',
+            description: '服薬履歴ID',
+            in: 'path',
+            required: true,
+            schema: new Schema(type: 'integer'),
+        )
+    ],
     responses: [
         new Response(
             response: 200,

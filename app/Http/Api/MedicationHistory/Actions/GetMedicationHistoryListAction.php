@@ -14,11 +14,10 @@ use OpenApi\Attributes\Parameter;
 use OpenApi\Attributes\Response;
 use OpenApi\Attributes\Schema;
 
-
 #[Get(
-    path: '/medication_histories',
+    path: '/api/medication_histories',
     summary: '服薬履歴を一覧で取得する',
-    tags: ['Drug'],
+    tags: ['MedicationHistory'],
     parameters: [
         new Parameter(
             name: 'page',
@@ -47,7 +46,7 @@ use OpenApi\Attributes\Schema;
             response: 200,
             description: 'success',
             content: new JsonContent(
-                ref: '#/components/schemas/get_drug_list_responder',
+                ref: '#/components/schemas/get_medication_history_list_responder',
             )
         )
     ]

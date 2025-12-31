@@ -11,12 +11,23 @@ use App\Services\DrugService;
 use Domain\Drug\DrugId;
 use OpenApi\Attributes\Get;
 use OpenApi\Attributes\JsonContent;
+use OpenApi\Attributes\Parameter;
 use OpenApi\Attributes\Response;
+use OpenApi\Attributes\Schema;
 
 #[Get(
-    path: '/drugs/{id}',
+    path: '/api/drugs/{id}',
     summary: '薬の詳細',
     tags: ['Drug'],
+    parameters: [
+        new Parameter(
+            name: 'id',
+            description: '薬ID',
+            in: 'path',
+            required: true,
+            schema: new Schema(type: 'integer'),
+        )
+    ],
     responses: [
         new Response(
             response: 200,

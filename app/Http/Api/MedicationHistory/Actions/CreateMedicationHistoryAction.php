@@ -14,20 +14,20 @@ use OpenApi\Attributes\RequestBody;
 use OpenApi\Attributes\Response;
 
 #[Post(
-    path: '/drugs',
-    summary: '薬の作成',
+    path: '/api/medication_histories',
+    summary: '服薬履歴の作成',
     requestBody: new RequestBody(
         content: new JsonContent(
-            ref: '#/components/schemas/create_drug_request'
+            ref: '#/components/schemas/create_medication_history_request'
         )
     ),
-    tags: ['Drug'],
+    tags: ['MedicationHistory'],
     responses: [
         new Response(
             response: 200,
             description: 'Successful',
             content: new JsonContent(
-                ref: '#/components/schemas/200_empty'
+                ref: '#/components/schemas/create_medication_history_responder'
             )
         ),
         new Response(

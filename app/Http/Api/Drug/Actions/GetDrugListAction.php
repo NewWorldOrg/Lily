@@ -15,7 +15,7 @@ use OpenApi\Attributes\Response;
 use OpenApi\Attributes\Schema;
 
 #[Get(
-    path: '/drugs',
+    path: '/api/drugs',
     summary: '薬を一覧で取得する',
     tags: ['Drug'],
     parameters: [

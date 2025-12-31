@@ -94,3 +94,6 @@ tasks:
 
   start_discord_bot:
     cmd: docker compose exec app php artisan discord-bot:run
+
+  swagger:
+    cmd: docker compose exec app php artisan l5-swagger:generate
