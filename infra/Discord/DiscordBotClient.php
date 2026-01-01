@@ -7,6 +7,7 @@ namespace Infra\Discord;
 use Discord\Builders\CommandBuilder;
 use Discord\Builders\Components\Option;
 use Discord\Builders\Components\SelectMenu;
+use Discord\Builders\Components\StringSelect;
 use Discord\Builders\MessageBuilder;
 use Discord\Discord;
 use Discord\Exceptions\IntentException;
@@ -74,7 +75,7 @@ class DiscordBotClient
                 $interaction->respondWithMessage(MessageBuilder::new()->setContent('利用可能なチャンネルが見つかりませんでした。'), true);
             }
 
-            $selectMenu = SelectMenu::new();
+            $selectMenu = StringSelect::new();
             $selectMenu
                 ->setPlaceholder('チャンネルを選択してください。')
                 ->setMaxValues(1)
@@ -102,7 +103,8 @@ class DiscordBotClient
 
                 $channel = $this->discord->getChannel($values[0]);
 
-                $channel->getMessageHistory(['limit' => 100])->done(function (Collection $messages) use ($channel) {
+
+                $channel->getMessageHistory(['limit' => 100])->then(function (Collection $messages) use ($channel) {
                     $channel->deleteMessages($messages);
                 });
 
