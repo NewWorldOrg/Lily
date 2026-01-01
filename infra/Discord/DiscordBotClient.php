@@ -170,7 +170,7 @@ class DiscordBotClient
                     $channel = $this->discord->getChannel($c->getDiscordChanelId()->getRawValue());
 
                     $messageList->map(function (\Domain\Message\Message $message) use ($channel) {
-                        $channel->messages->fetch($message->getDiscordMessageId()->getRawValue())->done(
+                        $channel->messages->fetch($message->getDiscordMessageId()->getRawValue())->then(
                             function (Message $m) {
                                 $m->delete();
                             }
