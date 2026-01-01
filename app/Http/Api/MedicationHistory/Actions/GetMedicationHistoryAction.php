@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Api\Drug\Actions;
+namespace App\Http\Api\MedicationHistory\Actions;
 
 use App\Http\Api\Common\Responder\ApiErrorResponder;
-use App\Http\Api\Drug\Responders\GetDrugResponder;
+use App\Http\Api\MedicationHistory\Responders\GetMedicationHistoryResponder;
 use App\Http\Controllers\Controller;
-use App\Services\DrugService;
-use Domain\Drug\DrugId;
+use App\Services\MedicationHistoryService;
+use Domain\MedicationHistory\MedicationHistoryId;
 use OpenApi\Attributes\Get;
 use OpenApi\Attributes\JsonContent;
 use OpenApi\Attributes\Parameter;
@@ -16,13 +16,13 @@ use OpenApi\Attributes\Response;
 use OpenApi\Attributes\Schema;
 
 #[Get(
-    path: '/api/drugs/{id}',
-    summary: '薬の詳細',
-    tags: ['Drug'],
+    path: '/api/medication_histories/{id}',
+    summary: '服薬履歴の詳細',
+    tags: ['MedicationHistory'],
     parameters: [
         new Parameter(
             name: 'id',
-            description: '薬ID',
+            description: '服薬履歴ID',
             in: 'path',
             required: true,
             schema: new Schema(type: 'integer'),
@@ -33,7 +33,7 @@ use OpenApi\Attributes\Schema;
             response: 200,
             description: 'Successful',
             content: new JsonContent(
-                ref: '#/components/schemas/get_drug_responder'
+                ref: '#/components/schemas/get_medication_history_responder',
             )
         ),
         new Response(
@@ -45,21 +45,21 @@ use OpenApi\Attributes\Schema;
         )
     ]
 )]
-class GetDrugAction extends Controller
+class GetMedicationHistoryAction extends Controller
 {
-    public function __construct(private DrugService $drugService)
+    public function __construct(private MedicationHistoryService $medicationHistoryService)
     {
         parent::__construct();
     }
 
-    public function __invoke(int $id): GetDrugResponder|ApiErrorResponder
+    public function __invoke(int $id): GetMedicationHistoryResponder|ApiErrorResponder
     {
-        $result = $this->drugService->getDrug(new DrugId($id));
+        $result = $this->medicationHistoryService->getDetail(new MedicationHistoryId($id));
 
         if ($result->isFailed()) {
             return new ApiErrorResponder($result->getError());
         }
 
-        return new GetDrugResponder($result->getData());
+        return new GetMedicationHistoryResponder($result->getData());
     }
 }

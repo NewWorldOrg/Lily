@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Domain\Common;
 
-use Domain\Base\BaseTime;
+use Domain\Base\BaseDateTime;
 
-class UpdatedAt extends BaseTime
+class UpdatedAt extends BaseDateTime
 {
 }

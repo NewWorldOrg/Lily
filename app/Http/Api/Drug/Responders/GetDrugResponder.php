@@ -26,5 +26,6 @@ class GetDrugResponder extends BaseResponder
         ],
     )]
     public function __construct(public readonly DrugDetail $drug)
-    {}
+    {
+    }
 }

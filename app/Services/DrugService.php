@@ -79,7 +79,7 @@ class DrugService extends AppService
     public function getDrug(DrugId $drugId): ServiceResult
     {
         try {
-            $drug = $this->drugDomainService->show($drugId);
+            $drug = $this->drugDomainService->get($drugId);
             $drugDetail = new DrugDetail($drug);
 
             return ServiceResult::success($drugDetail);

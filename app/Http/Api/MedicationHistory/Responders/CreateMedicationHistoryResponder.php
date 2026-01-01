@@ -2,30 +2,30 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Api\Drug\Responders;
+namespace App\Http\Api\MedicationHistory\Responders;
 
-use App\DataTransfer\Drug\DrugDetail;
+use App\DataTransfer\MedicationHistory\MedicationHistoryDetail;
 use App\Http\Api\Common\Responder\BaseResponder;
 use OpenApi\Attributes\Property;
 use OpenApi\Attributes\Schema;
 
 #[Schema(
-    schema: 'create_drug_responder',
+    schema: 'create_medication_history_responder',
     allOf: [new Schema('#/components/schemas/base_responder')]
 )]
-class CreateDrugResponder extends BaseResponder
+class CreateMedicationHistoryResponder extends BaseResponder
 {
     #[Property(
         property: 'data',
         properties: [
             new Property(
                 property: 'drug',
-                ref: '#/components/schemas/drug_detail',
+                ref: '#/components/schemas/medication_history_detail',
                 type: 'object',
             )
         ],
     )]
-    public function __construct(public readonly DrugDetail $drug)
+    public function __construct(public readonly MedicationHistoryDetail $medicationHistory)
     {
     }
 }

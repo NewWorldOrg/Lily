@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace App\DataTransfer\MedicationHistory;
 
+use App\DataTransfer\BaseApiPaginator;
 use Domain\Common\Paginator\Paginate;
 use Domain\MedicationHistory\MedicationHistoryCount;
-use Illuminate\Pagination\LengthAwarePaginator;
+use OpenApi\Attributes\Schema;
 
-
-class MedicationHistoryDetailPaginator extends LengthAwarePaginator
+#[Schema(schema: 'medication_history_list_result', allOf: [new Schema('#/components/schemas/base_api_paginator')])]
+class MedicationHistoryListResult extends BaseApiPaginator
 {
     public function __construct(
         MedicationHistoryDetailList $medicationHistoryDetailList,
@@ -17,11 +18,9 @@ class MedicationHistoryDetailPaginator extends LengthAwarePaginator
         Paginate $paginate,
     ) {
         parent::__construct(
-            $medicationHistoryDetailList,
+            $medicationHistoryDetailList->toArray(),
             $medicationHistoryCount->getRawValue(),
             $paginate->getPerPage()->getRawValue(),
         );
-
-        $this->appends('per_page', $paginate->getPerPage()->getRawValue());
     }
 }

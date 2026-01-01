@@ -51,14 +51,8 @@ readonly class MedicationHistory
         return $this->createdAt;
     }
 
-    public function toArray(): array
+    public function getUpdatedAt(): UpdatedAt
     {
-        return [
-            'id' => $this->getId()->getRawValue(),
-            'userId' => $this->getUserId()->getRawValue(),
-            'drugId' => $this->getDrugId()->getRawValue(),
-            'amount' => $this->getAmount()->getRawValue(),
-            'createdAt' => $this->createdAt->getDetail(),
-        ];
+        return $this->updatedAt;
     }
 }

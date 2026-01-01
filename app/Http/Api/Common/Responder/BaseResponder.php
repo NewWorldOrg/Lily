@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Api\Common\Responder;
 
+use Domain\Base\BaseDateTime;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Http\JsonResponse;
 use OpenApi\Attributes\Property;
@@ -55,6 +56,14 @@ abstract class BaseResponder implements Responsable
     protected function objectToArray($data, bool $strict = true)
     {
         if (true === \is_object($data)) {
+            if ($data instanceof BaseDateTime) {
+                return $data->getIsoString();
+            }
+
+            if (method_exists($data, 'getRawValue')) {
+                return $data->getRawValue();
+            }
+
             if (method_exists($data, '__toArray')) {
                 return $data->__toArray($strict);
             }
