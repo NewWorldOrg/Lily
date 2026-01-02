@@ -61,7 +61,7 @@ class DiscordBotClient
         $this->discord = new Discord([
             'token' => env('DISCORD_BOT_TOKEN'),
             'loadAllMembers' => true,
-            'intents' => Intents::getDefaultIntents() | Intents::GUILD_MEMBERS,
+            'intents' => Intents::getDefaultIntents() | Intents::GUILD_MEMBERS |  Intents::MESSAGE_CONTENT,
         ]);
 
         $this->discord->listenCommand(SlashCommand::CLEANUP_HISTORY->getValue()->getRawValue(), function (Interaction $interaction) {
@@ -122,7 +122,7 @@ class DiscordBotClient
                 $interaction->respondWithMessage(MessageBuilder::new()->setContent('利用可能なチャンネルが見つかりませんでした。'), true);
             }
 
-            $selectMenu = SelectMenu::new();
+            $selectMenu = StringSelect::new();
             $selectMenu
                 ->setPlaceholder('チャンネルを選択してください。')
                 ->setMaxValues(1)
@@ -157,7 +157,7 @@ class DiscordBotClient
             $interaction->respondWithMessage(MessageBuilder::new()->setContent('監視対象に追加しました'), true);
         });
 
-        $this->discord->on('ready', function(Discord $discord) {
+        $this->discord->on('ready', function (Discord $discord) {
             $discord->getLoop()->addPeriodicTimer(1, function () use ($discord) {
                 $createdAt = CreatedAt::now()->subDay(1);
 
@@ -180,7 +180,7 @@ class DiscordBotClient
                     $this->messageRepository->deleteByDiscordMessageIdList($messageList->getDiscordMessageIdList());
                 });
             });
-            $discord->on('message', function(Message $message) use ($discord) {
+            $discord->on('message', function (Message $message) use ($discord) {
                 $this->message = $message;
 
                 $this->audit($this->message);
@@ -203,7 +203,11 @@ class DiscordBotClient
                 }
 
                 match (true) {
-                    $cmd->isRegisterDrug() => $this->discordBotCommandSystem->registerDrug($args, $discord, $this->message),
+                    $cmd->isRegisterDrug() => $this->discordBotCommandSystem->registerDrug(
+                        $args,
+                        $discord,
+                        $this->message,
+                    ),
                     $cmd->isMedication() => $this->discordBotCommandSystem->medication($args, $discord, $this->message),
                     $cmd->isInitSlashCommands() => SlashCommand::toArray()->map(
                         fn (SlashCommand $slashCommand) => $this->initSlashCommands($discord, $slashCommand)
@@ -219,7 +223,7 @@ class DiscordBotClient
 
     private function audit(Message $message): void
     {
-        try{
+        try {
             $channel = $this->channelRepository->getByDiscordChannelId(new DiscordChannelId($message->channel_id));
 
             if (
