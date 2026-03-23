@@ -22,9 +22,9 @@ class MedicationHistoryDetail
 {
     #[Property(type: 'integer', example: 1)]
     public MedicationHistoryId $id;
-    #[Property(type: 'integer', example: 930316)]
+    #[Property(type: 'integer', format: 'int64', example: 3169303169303169303)]
     public UserId $userId;
-    #[Property(type: 'integer', example: 10)]
+    #[Property(type: 'number', example: 0.4)]
     public Amount $amount;
     #[Property(type: 'integer', example: 1)]
     public DrugId $drugId;

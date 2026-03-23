@@ -198,7 +198,8 @@
                         "description": "DiscordのUserId",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "integer",
+                            "format": "int64"
                         }
                     }
                 ],
@@ -368,11 +369,12 @@
                     },
                     "userId": {
                         "type": "integer",
-                        "example": 930316
+                        "format": "int64",
+                        "example": 365020923906097166
                     },
                     "amount": {
-                        "type": "integer",
-                        "example": 10
+                        "type": "number",
+                        "example": 0.4
                     },
                     "drugId": {
                         "type": "integer",
@@ -560,10 +562,11 @@
                         "type": "integer"
                     },
                     "user_id": {
-                        "type": "integer"
+                        "type": "integer",
+                        "format": "int64"
                     },
                     "amount": {
-                        "type": "integer"
+                        "type": "number"
                     },
                     "medication_date": {
                         "type": "string"
