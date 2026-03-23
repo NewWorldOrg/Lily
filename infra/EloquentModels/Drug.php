@@ -7,6 +7,7 @@ namespace Infra\EloquentModels;
 use Domain\Drug\Drug as DrugDomain;
 use Domain\Drug\DrugId;
 use Domain\Drug\DrugName;
+use Domain\Drug\DrugNote;
 use Domain\Drug\DrugUrl;
 use Illuminate\Database\Eloquent\Builder;
 use Infra\EloquentModels\Model as AppModel;
@@ -86,7 +87,8 @@ class Drug extends AppModel
         return new DrugDomain(
             new DrugId($this->id),
             new DrugName($this->drug_name),
-            new DrugUrl($this->url)
+            new DrugUrl($this->url),
+            new DrugNote($this->note)
         );
     }
 

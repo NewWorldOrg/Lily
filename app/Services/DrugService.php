@@ -16,6 +16,7 @@ use Domain\Drug\Drug;
 use Domain\Drug\DrugDomainService;
 use Domain\Drug\DrugId;
 use Domain\Drug\DrugName;
+use Domain\Drug\DrugNote;
 use Domain\Drug\DrugRepository;
 use Domain\Drug\DrugUrl;
 use Domain\Exception\NotFoundException;
@@ -122,11 +123,12 @@ class DrugService extends AppService
      * @param DrugUrl $url
      * @return ServiceResult<DrugDetail>
      */
-    public function createDrug(DrugName $drugName, DrugUrl $url): ServiceResult
+    public function createDrug(DrugName $drugName, DrugUrl $url, DrugNote $note): ServiceResult
     {
         $drug = $this->drugDomainService->createDrug(
             $drugName,
             $url,
+            $note,
         );
 
       return ServiceResult::success(new DrugDetail($drug));
@@ -144,6 +146,7 @@ class DrugService extends AppService
         DrugId $drugId,
         DrugName $drugName,
         DrugUrl $drugUrl,
+        DrugNote $drugNote,
     ): array {
 
         $result = $this->drugDomainService->updateDrug(
@@ -151,6 +154,7 @@ class DrugService extends AppService
                 $drugId,
                 $drugName,
                 $drugUrl,
+                $drugNote,
             )
         );
 

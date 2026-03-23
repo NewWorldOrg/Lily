@@ -12,14 +12,14 @@ use OpenApi\Attributes\Property;
 use OpenApi\Attributes\Schema;
 
 #[Schema(
-    schema: 'create_drug_request',
+    schema: 'update_drug_request',
     properties: [
         new Property(property: 'drug_name', type: 'string'),
         new Property(property: 'url', type: 'string'),
         new Property(property: 'note', type: 'string', nullable: true),
     ]
 )]
-class CreateDrugRequest extends ApiRequest
+class UpdateDrugRequest extends ApiRequest
 {
     public function authorize(): bool
     {

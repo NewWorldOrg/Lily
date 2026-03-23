@@ -11,6 +11,7 @@ use App\Http\Requests\Admin\Drugs\UpdateDrugRequest;
 use App\Services\DrugService;
 use Domain\Common\Paginator\Paginate;
 use Domain\Drug\DrugId;
+use Domain\Drug\DrugNote;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Redirector;
@@ -59,7 +60,7 @@ class DrugController extends AppController
      */
     public function store(CreateDrugRequest $request): Redirector|RedirectResponse|Application
     {
-        $response = $this->drugService->createDrug($request->getDrugName(), $request->getUrl());
+        $response = $this->drugService->createDrug($request->getDrugName(), $request->getUrl(), new DrugNote(null));
 
         if ($response->isFailed()) {
             if ($response->getError() === 'failed_register_drug') {
@@ -96,6 +97,7 @@ class DrugController extends AppController
             new DrugId($drugId),
             $request->getName(),
             $request->getUrl(),
+            new DrugNote(null),
         );
 
         if (!$response['status']) {

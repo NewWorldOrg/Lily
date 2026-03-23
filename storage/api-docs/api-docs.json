@@ -126,6 +126,47 @@
                     }
                 }
             },
+            "put": {
+                "tags": [
+                    "Drug"
+                ],
+                "summary": "薬の更新",
+                "operationId": "5f264d970c9e665978fca89cc2959acf",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/update_drug_request"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/update_drug_responder"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            },
             "delete": {
                 "tags": [
                     "Drug"
@@ -198,7 +239,8 @@
                         "description": "DiscordのUserId",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "integer",
+                            "format": "int64"
                         }
                     }
                 ],
@@ -294,6 +336,47 @@
                         }
                     }
                 }
+            },
+            "put": {
+                "tags": [
+                    "MedicationHistory"
+                ],
+                "summary": "服薬履歴の更新",
+                "operationId": "8c7491dcc38d7042c9e07e67e9b82bed",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/update_medication_history_request"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/update_medication_history_responder"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
             }
         }
     },
@@ -342,14 +425,31 @@
                     "url": {
                         "type": "string",
                         "example": "https://example.com/"
+                    },
+                    "note": {
+                        "type": "string",
+                        "example": "食後30分以内に服用",
+                        "nullable": true
                     }
                 },
                 "type": "object"
             },
             "drug_list_result": {
+                "type": "object",
                 "allOf": [
                     {
                         "$ref": "#/components/schemas/base_api_paginator"
+                    },
+                    {
+                        "properties": {
+                            "data": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/drug_detail"
+                                }
+                            }
+                        },
+                        "type": "object"
                     }
                 ]
             },
@@ -368,11 +468,12 @@
                     },
                     "userId": {
                         "type": "integer",
-                        "example": 930316
+                        "format": "int64",
+                        "example": 3169303169303169303
                     },
                     "amount": {
-                        "type": "integer",
-                        "example": 10
+                        "type": "number",
+                        "example": 0.4
                     },
                     "drugId": {
                         "type": "integer",
@@ -386,6 +487,11 @@
                         "type": "string",
                         "example": "https://example.com/"
                     },
+                    "note": {
+                        "type": "string",
+                        "example": "朝食後に服用",
+                        "nullable": true
+                    },
                     "createdAt": {
                         "type": "string",
                         "example": "2022-01-01T00:00:00+09:00"
@@ -398,9 +504,21 @@
                 "type": "object"
             },
             "medication_history_list_result": {
+                "type": "object",
                 "allOf": [
                     {
                         "$ref": "#/components/schemas/base_api_paginator"
+                    },
+                    {
+                        "properties": {
+                            "data": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/medication_history_detail"
+                                }
+                            }
+                        },
+                        "type": "object"
                     }
                 ]
             },
@@ -487,6 +605,25 @@
                     },
                     "url": {
                         "type": "string"
+                    },
+                    "note": {
+                        "type": "string",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "update_drug_request": {
+                "properties": {
+                    "drug_name": {
+                        "type": "string"
+                    },
+                    "url": {
+                        "type": "string"
+                    },
+                    "note": {
+                        "type": "string",
+                        "nullable": true
                     }
                 },
                 "type": "object"
@@ -554,19 +691,40 @@
                     }
                 ]
             },
+            "update_drug_responder": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/base_responder"
+                    }
+                ]
+            },
             "create_medication_history_request": {
                 "properties": {
                     "drug_id": {
                         "type": "integer"
                     },
                     "user_id": {
-                        "type": "integer"
+                        "type": "integer",
+                        "format": "int64"
                     },
                     "amount": {
-                        "type": "integer"
+                        "type": "number"
                     },
                     "medication_date": {
                         "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "update_medication_history_request": {
+                "properties": {
+                    "amount": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "note": {
+                        "type": "string",
+                        "nullable": true
                     }
                 },
                 "type": "object"
@@ -628,6 +786,22 @@
                                     }
                                 },
                                 "type": "object"
+                            }
+                        },
+                        "type": "object"
+                    }
+                ]
+            },
+            "update_medication_history_responder": {
+                "type": "object",
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/base_responder"
+                    },
+                    {
+                        "properties": {
+                            "data": {
+                                "$ref": "#/components/schemas/medication_history_detail"
                             }
                         },
                         "type": "object"

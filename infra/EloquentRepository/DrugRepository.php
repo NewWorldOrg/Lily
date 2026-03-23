@@ -11,6 +11,7 @@ use Domain\Drug\DrugCount;
 use Domain\Drug\DrugId;
 use Domain\Drug\DrugList;
 use Domain\Drug\DrugName;
+use Domain\Drug\DrugNote;
 use Domain\Drug\DrugRepository as DrugRepositoryInterface;
 use Domain\Drug\DrugUrl;
 use Domain\Exception\LogicException;
@@ -74,11 +75,12 @@ class DrugRepository implements DrugRepositoryInterface
         })->toArray());
     }
 
-    public function create(DrugName $drugName, DrugUrl $drugUrl): Drug
+    public function create(DrugName $drugName, DrugUrl $drugUrl, DrugNote $drugNote): Drug
     {
         $model = new DrugModel;
         $model->drug_name = $drugName->getRawValue();
         $model->url = $drugUrl->getRawValue();
+        $model->note = $drugNote->getRawValue();
 
         $model->save();
 
@@ -90,6 +92,7 @@ class DrugRepository implements DrugRepositoryInterface
         $model = DrugModel::where(['id' => $drug->getId()->getRawValue()])->first();
         $model->drug_name = $drug->getName()->getRawValue();
         $model->url = $drug->getUrl()->getRawValue();
+        $model->note = $drug->getNote()->getRawValue();
 
         $model->save();
 

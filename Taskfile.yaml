@@ -2,7 +2,7 @@ version: '3'
 
 vars:
   app_container_id:
-    sh: "docker compose ps -q app"
+    sh: "docker compose ps -q lily"
 
 tasks:
   default:
@@ -27,47 +27,47 @@ tasks:
     cmd: docker compose build --no-cache
 
   composer_install:
-    cmd: docker compose exec app composer install --ignore-platform-reqs
+    cmd: docker compose exec lily composer install --ignore-platform-reqs
 
   cache_clear:
     cmds:
-      - docker compose exec app php artisan cache:clear
-      - docker compose exec app php artisan view:clear
-      - docker compose exec app php artisan route:clear
-      - docker compose exec app php artisan config:clear
+      - docker compose exec lily php artisan cache:clear
+      - docker compose exec lily php artisan view:clear
+      - docker compose exec lily php artisan route:clear
+      - docker compose exec lily php artisan config:clear
 
   permission:
-    cmd: docker compose exec app chmod -R 777 /code/storage bootstrap/cache
+    cmd: docker compose exec lily chmod -R 777 /code/storage bootstrap/cache
 
   migrate:
-    cmd: docker compose exec app php artisan migrate
+    cmd: docker compose exec lily php artisan migrate
 
   migrate_seed:
-    cmd: docker compose exec app php artisan migrate:fresh --seed --drop-views
+    cmd: docker compose exec lily php artisan migrate:fresh --seed --drop-views
 
   test_seed:
-    cmd: docker compose exec app php artisan migrate:fresh --seed --drop-views --env=testing
+    cmd: docker compose exec lily php artisan migrate:fresh --seed --drop-views --env=testing
 
   test_feature:
-    cmd: docker compose exec app bash -c "vendor/bin/phpunit --testsuite Feature --testdox --colors=always"
+    cmd: docker compose exec lily bash -c "vendor/bin/phpunit --testsuite Feature --testdox --colors=always"
 
   test_unit:
-    cmd: docker compose exec app bash -c "vendor/bin/phpunit --testsuite Unit --testdox --colors=always"
+    cmd: docker compose exec lily bash -c "vendor/bin/phpunit --testsuite Unit --testdox --colors=always"
 
   test_db_integration:
-    cmd: docker compose exec app bash -c "vendor/bin/phpunit --testsuite DbIntegration --testdox --colors=always"
+    cmd: docker compose exec lily bash -c "vendor/bin/phpunit --testsuite DbIntegration --testdox --colors=always"
 
   bash:
-    cmd: docker compose exec app bash
+    cmd: docker compose exec lily bash
 
   node-ssh:
     cmd: docker compose exec js bash
 
   ide_helper:
-    cmd: docker compose exec app php artisan ide-helper:generate
+    cmd: docker compose exec lily php artisan ide-helper:generate
 
   ide_helper_models:
-    cmd: docker compose exec app php artisan ide-helper:models --dir="infra/EloquentModels"
+    cmd: docker compose exec lily php artisan ide-helper:models --dir="infra/EloquentModels"
 
   up:
     cmd: docker compose up -d
@@ -75,25 +75,22 @@ tasks:
   down:
     cmd: docker compose down
 
-  down-mutagen:
-    cmd: mutagen-compose -f compose.yml -f compose.mutagen.yml down
-
   stop:
     cmd: docker compose stop
 
   setup:
     cmds:
       - task: composer_install
-      - docker compose exec app php artisan key:generate
+      - docker compose exec lily php artisan key:generate
       - task: ide_helper
       - task: cache_clear
       - task: migrate_seed
       - task: test_seed
       - task: permission
-      - docker compose exec app php artisan storage:link
+      - docker compose exec lily php artisan storage:link
 
   start_discord_bot:
-    cmd: docker compose exec app php artisan discord-bot:run
+    cmd: docker compose exec lily php artisan discord-bot:run
 
   swagger:
-    cmd: docker compose exec app php artisan l5-swagger:generate
+    cmd: docker compose exec lily php artisan l5-swagger:generate

@@ -104,6 +104,7 @@ class MedicationHistoryRepository implements MedicationHistoryRepositoryInterfac
         ])->first();
 
         $model->amount = $medicationHistory->getAmount()->getRawValue();
+        $model->note = $medicationHistory->getNote()->getRawValue();
 
         $model->save();
 

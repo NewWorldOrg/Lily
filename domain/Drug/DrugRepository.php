@@ -13,7 +13,7 @@ interface DrugRepository
     public function getCount(): DrugCount;
     public function findDrugByName(DrugName $drugName): Drug;
     public function getPaginator(Paginate $paginate): DrugList;
-    public function create(DrugName $drugName, DrugUrl $drugUrl): Drug;
+    public function create(DrugName $drugName, DrugUrl $drugUrl, DrugNote $drugNote): Drug;
     public function update(Drug $drug): Drug;
     public function delete(DrugId $drugId): void;
 }

@@ -16,8 +16,8 @@ use OpenApi\Attributes\Schema;
     schema: 'create_medication_history_request',
     properties: [
         new Property(property: 'drug_id', type: 'integer'),
-        new Property(property: 'user_id', type: 'integer'),
-        new Property(property: 'amount', type: 'integer'),
+        new Property(property: 'user_id', type: 'integer', format: 'int64'),
+        new Property(property: 'amount', type: 'number'),
         new Property(property: 'medication_date', type: 'string'),
     ]
 )]

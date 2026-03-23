@@ -38,7 +38,7 @@ use OpenApi\Attributes\Schema;
             description: 'DiscordのUserId',
             in: 'query',
             required: true,
-            schema: new Schema(type: 'integer'),
+            schema: new Schema(type: 'integer', format: 'int64'),
         )
     ],
     responses: [
