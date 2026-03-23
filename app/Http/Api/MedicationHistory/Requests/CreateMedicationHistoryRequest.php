@@ -33,7 +33,7 @@ class CreateMedicationHistoryRequest extends ApiRequest
         return [
             'drug_id' => 'required|integer',
             'user_id' => 'required|integer',
-            'amount' => 'required|integer',
+            'amount' => 'required|numeric',
             'medication_date' => 'required|date',
         ];
     }
@@ -50,7 +50,7 @@ class CreateMedicationHistoryRequest extends ApiRequest
 
     public function getAmount(): Amount
     {
-        return new Amount($this->integer('amount'));
+        return new Amount((float) $this->input('amount'));
     }
 
     public function getMedicationData(): MedicationDate
