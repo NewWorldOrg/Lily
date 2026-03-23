@@ -25,7 +25,7 @@ class CreateMedicationHistoryResponder extends BaseResponder
             )
         ],
     )]
-    public function __construct(public readonly MedicationHistoryDetail $medicationHistory)
+    public function __construct(public readonly MedicationHistoryDetail $drug)
     {
     }
 }
