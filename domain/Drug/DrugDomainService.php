@@ -35,9 +35,9 @@ class DrugDomainService
         return $this->drugRepository->getPaginator($paginate);
     }
 
-    public function createDrug(DrugName $drugName, DrugUrl $drugUrl): Drug
+    public function createDrug(DrugName $drugName, DrugUrl $drugUrl, DrugNote $drugNote): Drug
     {
-        return $this->drugRepository->create($drugName, $drugUrl);
+        return $this->drugRepository->create($drugName, $drugUrl, $drugNote);
     }
 
     public function updateDrug(Drug $drug): Drug

@@ -13,6 +13,7 @@ use Domain\Drug\DrugUrl;
 use Domain\MedicationHistory\Amount;
 use Domain\MedicationHistory\MedicationHistory;
 use Domain\MedicationHistory\MedicationHistoryId;
+use Domain\MedicationHistory\MedicationNote;
 use Domain\MedicationHistory\UserId;
 use OpenApi\Attributes\Property;
 use OpenApi\Attributes\Schema;
@@ -32,6 +33,8 @@ class MedicationHistoryDetail
     public DrugName $drugName;
     #[Property(type: 'string', example: 'https://example.com/')]
     public DrugUrl $drugUrl;
+    #[Property(type: 'string', nullable: true, example: '朝食後に服用')]
+    public MedicationNote $note;
     #[Property(type: 'string', example: '2022-01-01T00:00:00+09:00')]
     public CreatedAt $createdAt;
     #[Property(type: 'string', example: '2022-03-16T00:00:00+09:00')]
@@ -47,6 +50,7 @@ class MedicationHistoryDetail
         $this->drugId = $drug->getId();
         $this->drugName = $drug->getName();
         $this->drugUrl = $drug->getUrl();
+        $this->note = $medicationHistory->getNote();
         $this->createdAt = $medicationHistory->getCreatedAt();
         $this->updatedAt = $medicationHistory->getUpdatedAt();
     }

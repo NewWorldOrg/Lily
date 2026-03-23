@@ -16,6 +16,7 @@ readonly class MedicationHistory
         private DrugId $drugId,
         private Amount $amount,
         private MedicationDate $medicationDate,
+        private MedicationNote $note,
         private CreatedAt $createdAt,
         private UpdatedAt $updatedAt,
     ) {
@@ -44,6 +45,11 @@ readonly class MedicationHistory
     public function getMedicationDate(): MedicationDate
     {
         return $this->medicationDate;
+    }
+
+    public function getNote(): MedicationNote
+    {
+        return $this->note;
     }
 
     public function getCreatedAt(): CreatedAt

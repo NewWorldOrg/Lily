@@ -9,6 +9,7 @@ use Domain\Common\UpdatedAt;
 use Domain\Drug\DrugId;
 use Domain\MedicationHistory\MedicationDate;
 use Domain\MedicationHistory\MedicationHistory as MedicationHistoryDomain;
+use Domain\MedicationHistory\MedicationNote;
 use Domain\MedicationHistory\Amount;
 use Domain\MedicationHistory\MedicationHistoryId;
 use Domain\MedicationHistory\UserId;
@@ -69,6 +70,7 @@ class MedicationHistory extends AppModel
             new DrugId((int)$this->drug_id),
             new Amount((float)$this->amount),
             MedicationDate::forStringTime((string)$this->medication_date),
+            new MedicationNote($this->note),
             CreatedAt::forStringTime((string)$this->created_at),
             UpdatedAt::forStringTime((string)$this->updated_at),
         );

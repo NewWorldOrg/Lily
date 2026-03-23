@@ -51,6 +51,7 @@ class CreateDrugAction extends Controller
         $result = $this->drugService->createDrug(
             $request->getDrugName(),
             $request->getUrl(),
+            $request->getNote(),
         );
 
         return new CreateDrugResponder($result->getData());
