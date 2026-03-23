@@ -348,9 +348,21 @@
                 "type": "object"
             },
             "drug_list_result": {
+                "type": "object",
                 "allOf": [
                     {
                         "$ref": "#/components/schemas/base_api_paginator"
+                    },
+                    {
+                        "properties": {
+                            "data": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/drug_detail"
+                                }
+                            }
+                        },
+                        "type": "object"
                     }
                 ]
             },
@@ -370,7 +382,7 @@
                     "userId": {
                         "type": "integer",
                         "format": "int64",
-                        "example": 365020923906097166
+                        "example": 3169303169303169303
                     },
                     "amount": {
                         "type": "number",
@@ -400,9 +412,21 @@
                 "type": "object"
             },
             "medication_history_list_result": {
+                "type": "object",
                 "allOf": [
                     {
                         "$ref": "#/components/schemas/base_api_paginator"
+                    },
+                    {
+                        "properties": {
+                            "data": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/medication_history_detail"
+                                }
+                            }
+                        },
+                        "type": "object"
                     }
                 ]
             },

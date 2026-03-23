@@ -8,9 +8,17 @@ use App\DataTransfer\BaseApiPaginator;
 use Domain\Common\Paginator\Paginate;
 use Domain\Drug\DrugCount;
 use Domain\Drug\DrugList;
+use OpenApi\Attributes\Items;
+use OpenApi\Attributes\Property;
 use OpenApi\Attributes\Schema;
 
-#[Schema(schema: 'drug_list_result', allOf: [new Schema('#/components/schemas/base_api_paginator')])]
+#[Schema(
+    schema: 'drug_list_result',
+    allOf: [new Schema(ref: '#/components/schemas/base_api_paginator')],
+    properties: [
+        new Property(property: 'data', type: 'array', items: new Items(ref: '#/components/schemas/drug_detail')),
+    ]
+)]
 class DrugListResult extends BaseApiPaginator
 {
     public function __construct(
