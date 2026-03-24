@@ -66,7 +66,7 @@ class MedicationHistoryService extends AppService
 
         $paginator = new MedicationHistoryListResult(
             $medicationHistoryDetailList,
-            $this->medicationHistoryRepository->getCount(),
+            $this->medicationHistoryRepository->getCountByUserId($userId),
             $paginate,
         );
 
