@@ -72,6 +72,12 @@ class MedicationHistoryRepository implements MedicationHistoryRepositoryInterfac
         return new MedicationHistoryCount($query->count());
     }
 
+    public function getCountByUserId(UserId $userId): MedicationHistoryCount
+    {
+        $query = MedicationHistoryModel::where(['user_id' => $userId->getRawValue()]);
+        return new MedicationHistoryCount($query->count());
+    }
+
     public function getCountMedicationTake(DrugId $drugId): RawPositiveInteger
     {
         return new RawPositiveInteger(

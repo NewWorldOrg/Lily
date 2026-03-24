@@ -14,6 +14,7 @@ interface MedicationHistoryRepository
     public function getPaginator(Paginate $paginate): MedicationHistoryList;
     public function getPaginatorByUserId(Paginate $paginate, UserId $userId): MedicationHistoryList;
     public function getCount(): MedicationHistoryCount;
+    public function getCountByUserId(UserId $userId): MedicationHistoryCount;
     public function getCountMedicationTake(DrugId $drugId): RawPositiveInteger;
     public function create(
         UserId $userId,
