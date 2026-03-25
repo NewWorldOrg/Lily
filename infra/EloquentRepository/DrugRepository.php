@@ -64,7 +64,7 @@ class DrugRepository implements DrugRepositoryInterface
     public function getPaginator(Paginate $paginate): DrugList
     {
         $builder = DrugModel::query()
-            ->orderBy('id', OrderKey::DESC->getValue()->getRawValue())
+            ->orderBy('drug_name', 'asc')
             ->limit($paginate->getLimit()->getRawValue())
             ->offset($paginate->offset()->getRawValue());
 
