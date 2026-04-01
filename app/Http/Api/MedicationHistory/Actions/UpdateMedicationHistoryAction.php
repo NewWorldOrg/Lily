@@ -59,12 +59,14 @@ class UpdateMedicationHistoryAction extends Controller
     {
         $existing = $this->medicationHistoryRepository->get(new MedicationHistoryId($id));
 
+        $medicationDate = $request->getMedicationDate() ?? $existing->getMedicationDate();
+
         $medicationHistory = new MedicationHistory(
             $existing->getId(),
             $existing->getUserId(),
             $existing->getDrugId(),
             $request->getAmount(),
-            $existing->getMedicationDate(),
+            $medicationDate,
             $request->getNote(),
             $existing->getCreatedAt(),
             UpdatedAt::now(),
