@@ -377,6 +377,45 @@
                         "description": "Unauthorized"
                     }
                 }
+            },
+            "delete": {
+                "tags": [
+                    "MedicationHistory"
+                ],
+                "summary": "服薬履歴を削除する",
+                "operationId": "1ad17a3f19538c0535c42eb5fd6295cd",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/base_responder"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/api_error_responder"
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     },
@@ -724,6 +763,11 @@
                     },
                     "note": {
                         "type": "string",
+                        "nullable": true
+                    },
+                    "medication_date": {
+                        "type": "string",
+                        "format": "date-time",
                         "nullable": true
                     }
                 },

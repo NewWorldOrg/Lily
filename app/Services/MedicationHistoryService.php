@@ -110,6 +110,21 @@ class MedicationHistoryService extends AppService
     }
 
     /**
+     * @param MedicationHistoryId $id
+     * @return ServiceResult<null>
+     */
+    public function delete(MedicationHistoryId $id): ServiceResult
+    {
+        try {
+            $this->medicationHistoryDomainService->delete($id);
+
+            return ServiceResult::success(null);
+        } catch (NotFoundException) {
+            return ServiceResult::fail(ServiceError::NotFound);
+        }
+    }
+
+    /**
      * @param DrugId $drugId
      * @param UserId $userId
      * @param Amount $amount
