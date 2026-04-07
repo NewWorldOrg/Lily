@@ -111,6 +111,7 @@ class MedicationHistoryRepository implements MedicationHistoryRepositoryInterfac
 
         $model->amount = $medicationHistory->getAmount()->getRawValue();
         $model->note = $medicationHistory->getNote()->getRawValue();
+        $model->medication_date = $medicationHistory->getMedicationDate()->getSqlTimeStamp();
 
         $model->save();
 
