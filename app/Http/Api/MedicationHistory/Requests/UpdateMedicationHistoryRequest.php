@@ -51,6 +51,6 @@ class UpdateMedicationHistoryRequest extends ApiRequest
         if (is_null($value)) {
             return null;
         }
-        return new MedicationDate($value);
+        return MedicationDate::forStringTime($value);
     }
 }

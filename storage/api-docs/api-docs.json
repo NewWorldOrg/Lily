@@ -531,6 +531,10 @@
                         "example": "朝食後に服用",
                         "nullable": true
                     },
+                    "medicationDate": {
+                        "type": "string",
+                        "example": "2022-01-01T00:00:00+09:00"
+                    },
                     "createdAt": {
                         "type": "string",
                         "example": "2022-01-01T00:00:00+09:00"

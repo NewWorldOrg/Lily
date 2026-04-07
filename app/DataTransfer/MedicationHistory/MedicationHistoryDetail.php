@@ -11,6 +11,7 @@ use Domain\Drug\DrugId;
 use Domain\Drug\DrugName;
 use Domain\Drug\DrugUrl;
 use Domain\MedicationHistory\Amount;
+use Domain\MedicationHistory\MedicationDate;
 use Domain\MedicationHistory\MedicationHistory;
 use Domain\MedicationHistory\MedicationHistoryId;
 use Domain\MedicationHistory\MedicationNote;
@@ -36,6 +37,8 @@ class MedicationHistoryDetail
     #[Property(type: 'string', nullable: true, example: '朝食後に服用')]
     public MedicationNote $note;
     #[Property(type: 'string', example: '2022-01-01T00:00:00+09:00')]
+    public MedicationDate $medicationDate;
+    #[Property(type: 'string', example: '2022-01-01T00:00:00+09:00')]
     public CreatedAt $createdAt;
     #[Property(type: 'string', example: '2022-03-16T00:00:00+09:00')]
     public UpdatedAt $updatedAt;
@@ -51,6 +54,7 @@ class MedicationHistoryDetail
         $this->drugName = $drug->getName();
         $this->drugUrl = $drug->getUrl();
         $this->note = $medicationHistory->getNote();
+        $this->medicationDate = $medicationHistory->getMedicationDate();
         $this->createdAt = $medicationHistory->getCreatedAt();
         $this->updatedAt = $medicationHistory->getUpdatedAt();
     }
