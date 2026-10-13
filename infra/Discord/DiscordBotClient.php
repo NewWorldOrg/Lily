@@ -16,10 +16,8 @@ use Discord\Parts\Channel\Channel;
 use Discord\Parts\Channel\Message;
 use Discord\Parts\Interactions\Interaction;
 use Discord\WebSockets\Intents;
-use Domain\Channel\ChannelId;
 use Domain\Channel\ChannelRepository;
 use Domain\Channel\DiscordChannelId;
-use Domain\Common\CreatedAt;
 use Domain\DiscordBot\BotCommand;
 use Domain\DiscordBot\SlashCommands\SlashCommand;
 use Domain\Exception\NotFoundException;
@@ -33,6 +31,7 @@ class DiscordBotClient
         private readonly ChannelRepository $channelRepository,
         private readonly MessageRepository $messageRepository,
         private readonly MessageBackfill $messageBackfill,
+        private readonly MessageSweep $messageSweep,
     ) {
     }
 
@@ -162,27 +161,7 @@ class DiscordBotClient
             $this->messageBackfill->run($discord);
 
             $discord->getLoop()->addPeriodicTimer(1, function () use ($discord) {
-                $createdAt = CreatedAt::now()->subDay(1);
-
-                $messageList = $this->messageRepository->oneDayHasPassMessageList($createdAt);
-
-                $channelIdList = $messageList->getChannelIdList();
-
-                $channelIdList->map(function (ChannelId $channelId) use ($messageList) {
-                    $c = $this->channelRepository->get($channelId);
-                    $channel = $this->discord->getChannel($c->getDiscordChanelId()->getRawValue());
-                    $channelMessageList = $messageList->getByChannelId($channelId);
-
-                    $channelMessageList->map(function (\Domain\Message\Message $message) use ($channel) {
-                        $channel->messages->fetch($message->getDiscordMessageId()->getRawValue())->then(
-                            function (Message $m) {
-                                $m->delete();
-                            }
-                        );
-                    });
-
-                    $this->messageRepository->deleteByDiscordMessageIdList($channelMessageList->getDiscordMessageIdList());
-                });
+                $this->messageSweep->run($discord);
             });
             $discord->on('message', function (Message $message) use ($discord) {
                 $this->message = $message;
