@@ -6,6 +6,7 @@ namespace Infra\EloquentRepository;
 
 use Domain\Channel\Channel;
 use Domain\Channel\ChannelId;
+use Domain\Channel\ChannelList;
 use Domain\Channel\ChannelRepository as ChannelRepositoryInterface;
 use Domain\Channel\DiscordChannelId;
 use Domain\Exception\NotFoundException;
@@ -22,6 +23,17 @@ class ChannelRepository implements ChannelRepositoryInterface
         }
 
         return $model->toDomain();
+    }
+
+    public function getChannels(): ChannelList
+    {
+        $channels = [];
+
+        foreach (ChannelModel::orderBy('id')->get() as $model) {
+            $channels[] = $model->toDomain();
+        }
+
+        return new ChannelList($channels);
     }
 
     public function getByDiscordChannelId(DiscordChannelId $discordChannelId): Channel

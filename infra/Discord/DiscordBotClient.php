@@ -32,6 +32,7 @@ class DiscordBotClient
         private readonly DiscordBotCommandSystem $discordBotCommandSystem,
         private readonly ChannelRepository $channelRepository,
         private readonly MessageRepository $messageRepository,
+        private readonly MessageBackfill $messageBackfill,
     ) {
     }
 
@@ -150,7 +151,7 @@ class DiscordBotClient
 
                 $channel = $this->discord->getChannel($values[0]);
 
-               $this->channelRepository->create(new DiscordChannelId($channel->id));
+                $this->channelRepository->create(new DiscordChannelId($channel->id));
 
             }, $this->discord);
 
@@ -158,6 +159,8 @@ class DiscordBotClient
         });
 
         $this->discord->on('ready', function (Discord $discord) {
+            $this->messageBackfill->run($discord);
+
             $discord->getLoop()->addPeriodicTimer(1, function () use ($discord) {
                 $createdAt = CreatedAt::now()->subDay(1);
 
@@ -168,8 +171,9 @@ class DiscordBotClient
                 $channelIdList->map(function (ChannelId $channelId) use ($messageList) {
                     $c = $this->channelRepository->get($channelId);
                     $channel = $this->discord->getChannel($c->getDiscordChanelId()->getRawValue());
+                    $channelMessageList = $messageList->getByChannelId($channelId);
 
-                    $messageList->map(function (\Domain\Message\Message $message) use ($channel) {
+                    $channelMessageList->map(function (\Domain\Message\Message $message) use ($channel) {
                         $channel->messages->fetch($message->getDiscordMessageId()->getRawValue())->then(
                             function (Message $m) {
                                 $m->delete();
@@ -177,7 +181,7 @@ class DiscordBotClient
                         );
                     });
 
-                    $this->messageRepository->deleteByDiscordMessageIdList($messageList->getDiscordMessageIdList());
+                    $this->messageRepository->deleteByDiscordMessageIdList($channelMessageList->getDiscordMessageIdList());
                 });
             });
             $discord->on('message', function (Message $message) use ($discord) {
