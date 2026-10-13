@@ -6,8 +6,11 @@ namespace Infra\EloquentRepository;
 
 use Domain\Channel\ChannelId;
 use Domain\Common\CreatedAt;
+use Domain\Common\UpdatedAt;
 use Domain\Message\DiscordMessageId;
 use Domain\Message\DiscordMessageIdList;
+use Domain\Message\HistoryMessage;
+use Domain\Message\HistoryMessageList;
 use Domain\Message\MessageList;
 use Domain\Message\MessageRepository as MessageRepositoryInterface;
 use Infra\EloquentModels\Message;
@@ -24,6 +27,37 @@ class MessageRepository implements MessageRepositoryInterface
         $model->discord_message_id = $discordMessageId->getRawValue();
 
         $model->save();
+    }
+
+    public function createHistoryMessageList(
+        ChannelId $channelId,
+        HistoryMessageList $historyMessageList
+    ): void {
+        $updatedAt = UpdatedAt::now()->getSqlTimeStamp();
+        $rows = [];
+
+        /** @var HistoryMessage $historyMessage */
+        foreach ($historyMessageList as $historyMessage) {
+            $rows[] = [
+                'channel_id' => $channelId->getRawValue(),
+                'discord_message_id' => $historyMessage->getDiscordMessageId()->getRawValue(),
+                'created_at' => $historyMessage->getCreatedAt()->getSqlTimeStamp(),
+                'updated_at' => $updatedAt,
+            ];
+        }
+
+        Message::insert($rows);
+    }
+
+    public function getTrackedDiscordMessageIdList(DiscordMessageIdList $discordMessageIdList): DiscordMessageIdList
+    {
+        $discordMessageIds = [];
+
+        foreach (Message::whereIn('discord_message_id', $discordMessageIdList->getRawValueList())->get() as $model) {
+            $discordMessageIds[] = new DiscordMessageId($model->discord_message_id);
+        }
+
+        return new DiscordMessageIdList($discordMessageIds);
     }
 
     public function oneDayHasPassMessageList(CreatedAt $createdAt): MessageList

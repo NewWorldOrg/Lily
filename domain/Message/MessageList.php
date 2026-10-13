@@ -12,9 +12,13 @@ class MessageList extends BaseListValue
 {
     public function getChannelIdList(): ChannelIdList
     {
-        return new ChannelIdList(
+        $channelIdList = new ChannelIdList(
             $this->map(fn (Message $message) => $message->getChannelId())->toArray()
         );
+
+        $channelIdList->unique();
+
+        return $channelIdList;
     }
 
     public function getDiscordMessageIdList(): DiscordMessageIdList
@@ -26,14 +30,6 @@ class MessageList extends BaseListValue
 
     public function getByChannelId(ChannelId $channelId): self
     {
-        return new self(
-            $this->map(function(Message $message) use ($channelId) {
-                if (!$message->getChannelId()->isEqual($channelId)) {
-                    return;
-                }
-
-                return $message;
-            })->toArray()
-        );
+        return $this->filter(fn (Message $message) => $message->getChannelId()->isEqual($channelId));
     }
 }

@@ -6,10 +6,11 @@ namespace Infra\EloquentModels;
 
 use Domain\Channel\ChannelId;
 use Domain\Channel\DiscordChannelId;
+use Domain\Common\CreatedAt;
 use Infra\EloquentModels\Model as AppModel;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $discord_channel_id
@@ -39,6 +40,7 @@ class Channel extends AppModel
         return new \Domain\Channel\Channel(
             new ChannelId((int)$this->id),
             new DiscordChannelId($this->discord_channel_id),
+            is_null($this->created_at) ? null : new CreatedAt($this->created_at->getTimestamp()),
         );
     }
 }
