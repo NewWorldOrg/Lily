@@ -32,6 +32,7 @@ class DiscordBotClient
         private readonly DiscordBotCommandSystem $discordBotCommandSystem,
         private readonly ChannelRepository $channelRepository,
         private readonly MessageRepository $messageRepository,
+        private readonly MessageBackfill $messageBackfill,
     ) {
     }
 
@@ -158,6 +159,8 @@ class DiscordBotClient
         });
 
         $this->discord->on('ready', function (Discord $discord) {
+            $this->messageBackfill->run($discord);
+
             $discord->getLoop()->addPeriodicTimer(1, function () use ($discord) {
                 $createdAt = CreatedAt::now()->subDay(1);
 
