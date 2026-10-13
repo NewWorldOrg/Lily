@@ -150,7 +150,7 @@ class DiscordBotClient
 
                 $channel = $this->discord->getChannel($values[0]);
 
-               $this->channelRepository->create(new DiscordChannelId($channel->id));
+                $this->channelRepository->create(new DiscordChannelId($channel->id));
 
             }, $this->discord);
 
@@ -168,8 +168,9 @@ class DiscordBotClient
                 $channelIdList->map(function (ChannelId $channelId) use ($messageList) {
                     $c = $this->channelRepository->get($channelId);
                     $channel = $this->discord->getChannel($c->getDiscordChanelId()->getRawValue());
+                    $channelMessageList = $messageList->getByChannelId($channelId);
 
-                    $messageList->map(function (\Domain\Message\Message $message) use ($channel) {
+                    $channelMessageList->map(function (\Domain\Message\Message $message) use ($channel) {
                         $channel->messages->fetch($message->getDiscordMessageId()->getRawValue())->then(
                             function (Message $m) {
                                 $m->delete();
@@ -177,7 +178,7 @@ class DiscordBotClient
                         );
                     });
 
-                    $this->messageRepository->deleteByDiscordMessageIdList($messageList->getDiscordMessageIdList());
+                    $this->messageRepository->deleteByDiscordMessageIdList($channelMessageList->getDiscordMessageIdList());
                 });
             });
             $discord->on('message', function (Message $message) use ($discord) {
