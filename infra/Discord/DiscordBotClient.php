@@ -7,6 +7,7 @@ namespace Infra\Discord;
 use Discord\Builders\CommandBuilder;
 use Discord\Builders\Components\Option;
 use Discord\Builders\Components\SelectMenu;
+use Discord\Builders\Components\SelectMenuOption;
 use Discord\Builders\Components\StringSelect;
 use Discord\Builders\MessageBuilder;
 use Discord\Discord;
@@ -92,7 +93,7 @@ class DiscordBotClient
                     return;
                 }
 
-                $selectMenu->addOption(Option::new("#{$channel->name}", $channel->id));
+                $selectMenu->addOption(new SelectMenuOption("#{$channel->name}", $channel->id));
             });
 
             $interaction->respondWithMessage(MessageBuilder::new()->addComponent($selectMenu), true);
@@ -139,7 +140,7 @@ class DiscordBotClient
                     return;
                 }
 
-                $selectMenu->addOption(Option::new("#{$channel->name}", $channel->id));
+                $selectMenu->addOption(new SelectMenuOption("#{$channel->name}", $channel->id));
             });
 
             $interaction->respondWithMessage(MessageBuilder::new()->addComponent($selectMenu), true);

@@ -13,7 +13,6 @@ use Domain\Common\RawPassword;
 
 class UpdateAdminUserRequest extends AppRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *

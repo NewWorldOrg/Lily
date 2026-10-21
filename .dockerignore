@@ -1,0 +1,15 @@
+.git
+.github
+.env
+.env.backup
+.phpunit.cache
+.phpunit.result.cache
+build
+node_modules
+vendor
+storage/logs/*
+!storage/logs/.gitignore
+public/hot
+public/storage
+compose.yml
+docker-compose.yml

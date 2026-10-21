@@ -18,4 +18,3 @@ abstract class BaseUrlValue extends CoString
         parent::__construct($value);
     }
 }
-

@@ -2,8 +2,6 @@ includes:
     - ./vendor/larastan/larastan/extension.neon
 parameters:
     level: max
-    excludePaths:
-        - app/Services/ServiceTrait.php
     paths:
         - domain
         - infra

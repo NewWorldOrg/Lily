@@ -15,7 +15,7 @@ use Illuminate\Notifications\Notifiable;
 use Domain\AdminUser\AdminUser as AdminUserDomain;
 
 /**
- * 
+ *
  *
  * @property int $id id
  * @property string $user_id 管理者ID

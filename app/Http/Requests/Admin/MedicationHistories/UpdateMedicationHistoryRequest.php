@@ -10,7 +10,6 @@ use Infra\EloquentModels\MedicationHistory;
 
 class UpdateMedicationHistoryRequest extends AppRequest
 {
-
     public function authorize(): bool
     {
         return true;

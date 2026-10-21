@@ -16,10 +16,10 @@ class DrugPaginator extends LengthAwarePaginator
         DrugCount $drugCount,
         Paginate $paginate,
     ) {
-       parent::__construct(
-           $drugList,
-           $drugCount->getRawValue(),
-           $paginate->getPerPage()->getRawValue(),
-       );
+        parent::__construct(
+            $drugList,
+            $drugCount->getRawValue(),
+            $paginate->getPerPage()->getRawValue(),
+        );
     }
 }

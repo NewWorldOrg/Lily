@@ -14,7 +14,7 @@ use Infra\EloquentModels\Model as AppModel;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $drug_name
@@ -38,7 +38,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class Drug extends AppModel
 {
-
     protected $table = 'drugs';
 
     protected $guarded = [

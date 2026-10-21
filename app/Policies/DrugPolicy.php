@@ -9,7 +9,6 @@ use Infra\EloquentModels\AdminUser;
 
 class DrugPolicy
 {
-
     public function create(AdminUser $adminUser): Response
     {
         $adminUserDomain = $adminUser->toDomain();

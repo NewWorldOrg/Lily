@@ -9,7 +9,6 @@ use Domain\Common\ListValue;
 use Domain\Common\RawInteger;
 use Domain\Common\RawString;
 
-
 enum AdminUserRole: int implements BaseEnum
 {
     case ROLE_SYSTEM = 1;

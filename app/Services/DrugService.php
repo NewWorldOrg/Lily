@@ -131,7 +131,7 @@ class DrugService extends AppService
             $note,
         );
 
-      return ServiceResult::success(new DrugDetail($drug));
+        return ServiceResult::success(new DrugDetail($drug));
     }
 
     /**

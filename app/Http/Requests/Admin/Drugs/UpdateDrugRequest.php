@@ -10,7 +10,6 @@ use Domain\Drug\DrugUrl;
 
 class UpdateDrugRequest extends AppRequest
 {
-
     public function authorize(): bool
     {
         return true;

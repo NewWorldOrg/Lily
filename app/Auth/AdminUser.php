@@ -12,7 +12,7 @@ use Illuminate\Contracts\Hashing\Hasher;
 class AdminUser implements Authenticatable
 {
     public function __construct(
-       private AdminUserDomain $adminUser,
+        private AdminUserDomain $adminUser,
     ) {
     }
 
@@ -59,7 +59,7 @@ class AdminUser implements Authenticatable
 
     public function getRememberToken()
     {
-        // do noting
+        return null;
     }
 
     public function getRememberTokenName()

@@ -11,8 +11,8 @@ use Illuminate\Support\Str;
 
 class Accessible
 {
-
-    public function handle($request, Closure $next, $guards = null) {
+    public function handle($request, Closure $next, $guards = null)
+    {
         /** @var AdminUser $currentUser */
         $currentUser = \Auth::user();
 

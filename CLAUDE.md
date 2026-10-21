@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-Lily is a medication history tracking system built with Laravel 12 and PHP 8.4. It provides:
+Lily is a medication history tracking system built with Laravel 13 and PHP 8.4. It provides:
 - **Admin web interface** (Laravel AdminLTE) for managing drugs, medication histories, and admin users
 - **REST API** for client applications (drugs and medication histories CRUD)
 - **Discord bot** integration for messaging
@@ -39,9 +39,9 @@ infra/      → Infrastructure layer (Eloquent repositories, Eloquent models, Di
 
 ## Tech Stack
 
-- **PHP 8.4** / **Laravel 12**
-- **MySQL 9.1** (utf8mb4)
-- **Vite 6** / **jQuery 3.7** (frontend)
+- **PHP 8.4** / **Laravel 13**
+- **MySQL 9.7** (utf8mb4)
+- **Vite 8** / **jQuery 3.7** (frontend)
 - **Docker** (PHP Unit server, MySQL, Node 22)
 - **Traefik** reverse proxy (external `docker_default` network)
 - **Composer** (PHP deps) / **Yarn** (JS deps)
@@ -82,7 +82,7 @@ vendor/bin/phpunit --testsuite DbIntegration --testdox --colors=always
 - **PSR-12** coding standard (via `php-cs-fixer`)
 - **PHPStan level max** (static analysis via `larastan`) — paths: `domain/`, `infra/`, `app/`
 - **StyleCI** with Laravel preset (`.styleci.yml`)
-- **PHPUnit 11** for testing (3 test suites: Unit, Feature, DbIntegration)
+- **PHPUnit 13** for testing (3 test suites: Unit, Feature, DbIntegration)
 - Test DB uses `mysql` connection with database name `test`
 
 ## CI/CD (GitHub Actions)

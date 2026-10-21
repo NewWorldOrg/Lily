@@ -18,14 +18,14 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Infra\Discord\MessageSweep;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use React\Promise\Deferred;
 use React\Promise\PromiseInterface;
 use Tests\DbIntegration\DbIntegrationTestCase;
 
 class MessageSweepTest extends DbIntegrationTestCase
 {
-    private Discord&MockObject $discord;
+    private Discord&Stub $discord;
 
     /**
      * @var array<string, Channel>
@@ -64,7 +64,7 @@ class MessageSweepTest extends DbIntegrationTestCase
         $this->freezeTime();
         Log::spy();
 
-        $this->discord = $this->createMock(Discord::class);
+        $this->discord = $this->createStub(Discord::class);
         $this->discord->method('getChannel')->willReturnCallback(function (string $id): ?Channel {
             $this->channelLookups[] = $id;
 
@@ -285,7 +285,7 @@ class MessageSweepTest extends DbIntegrationTestCase
 
     public function testFailureToLoadRecordsIsLoggedAndNotThrown(): void
     {
-        $messageRepository = $this->createMock(MessageRepository::class);
+        $messageRepository = $this->createStub(MessageRepository::class);
         $messageRepository->method('oneDayHasPassMessageList')->willThrowException(
             new \RuntimeException('Connection refused')
         );
@@ -322,10 +322,10 @@ class MessageSweepTest extends DbIntegrationTestCase
             return;
         }
 
-        $messages = $this->createMock(DiscordMessageRepository::class);
+        $messages = $this->createStub(DiscordMessageRepository::class);
         $messages->method('fetch')->willReturnCallback(fn (string $id): PromiseInterface => $this->fetchOnDiscord($id));
 
-        $channel = $this->createMock(Channel::class);
+        $channel = $this->createStub(Channel::class);
         $channel->method('__get')->willReturnCallback(
             fn (string $key) => $key === 'messages' ? $messages : null
         );
@@ -337,7 +337,7 @@ class MessageSweepTest extends DbIntegrationTestCase
     {
         $this->givenDiscordChannel($discordChannelId);
 
-        $message = $this->createMock(Message::class);
+        $message = $this->createStub(Message::class);
         $message->method('isDeletable')->willReturn(true);
         $message->method('delete')->willReturnCallback(fn (): PromiseInterface => $this->deleteOnDiscord($id));
 

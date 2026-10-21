@@ -36,7 +36,8 @@ class DrugControllerTest extends FeatureTestCase
 
         $this->post(route('admin.drugs.store'), $params)
             ->assertRedirect(route('admin.drugs.index'))
-            ->assertSessionHas('success');;
+            ->assertSessionHas('success');
+        ;
     }
 
     public function testEdit()

@@ -14,7 +14,8 @@ class HomeController extends AppController
      *
      * @return void
      */
-    public function __construct() {
+    public function __construct()
+    {
 
         parent::__construct();
 

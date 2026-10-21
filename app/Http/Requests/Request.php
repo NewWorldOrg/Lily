@@ -21,14 +21,14 @@ abstract class Request extends FormRequest
     * @throw HttpResponseException
     * @see FormRequest::failedValidation()
     */
-   protected function failedValidation(Validator $validator): void
-   {
-       $response['status']  = false;
-       $response['message'] = $validator->errors()->toArray();
-       throw new HttpResponseException(
-           response()->json($response, 422)
-       );
-   }
+    protected function failedValidation(Validator $validator): void
+    {
+        $response['status']  = false;
+        $response['message'] = $validator->errors()->toArray();
+        throw new HttpResponseException(
+            response()->json($response, 422)
+        );
+    }
 
     public function makePaginate(): Paginate
     {

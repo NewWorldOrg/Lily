@@ -1,5 +1,5 @@
 ## composer
-FROM composer:2 AS composer-cache
+FROM composer:2.10.3 AS composer-cache
 WORKDIR /code
 # copy only composer files for caching
 COPY composer.json composer.lock /code/
@@ -7,14 +7,13 @@ COPY composer.json composer.lock /code/
 # install deps(without generating autoloader)
 RUN composer install --no-scripts --no-autoloader --ignore-platform-reqs
 
-FROM php:8.4
+FROM php:8.4.27-bookworm
 
 COPY --from=composer-cache /usr/bin/composer /usr/bin/composer
 
 WORKDIR /code
 
 RUN apt update && \
-    apt full-upgrade -y && \
     apt full-upgrade -y && \
     apt autoremove -y && \
     apt autoclean -y && \

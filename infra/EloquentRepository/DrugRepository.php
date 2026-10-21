@@ -70,14 +70,14 @@ class DrugRepository implements DrugRepositoryInterface
 
         $collection = $builder->get();
 
-        return new DrugList($collection->map(function(DrugModel $model) {
+        return new DrugList($collection->map(function (DrugModel $model) {
             return $model->toDomain();
         })->toArray());
     }
 
     public function create(DrugName $drugName, DrugUrl $drugUrl, DrugNote $drugNote): Drug
     {
-        $model = new DrugModel;
+        $model = new DrugModel();
         $model->drug_name = $drugName->getRawValue();
         $model->url = $drugUrl->getRawValue();
         $model->note = $drugNote->getRawValue();

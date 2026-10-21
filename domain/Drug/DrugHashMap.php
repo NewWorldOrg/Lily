@@ -12,7 +12,7 @@ class DrugHashMap extends BaseHashMap
     {
         $a = [];
 
-        foreach($drugList as $drug) {
+        foreach ($drugList as $drug) {
             /** @var Drug $drug */
             $a[(string)$drug->getId()] = $drug;
         }

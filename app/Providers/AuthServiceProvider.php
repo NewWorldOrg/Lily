@@ -29,7 +29,7 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        $authManager->provider('adminAuth', function($app) {
+        $authManager->provider('adminAuth', function ($app) {
             return new AdminUserProvider(
                 $app->make(AdminUserRepository::class),
                 $app['hash'],

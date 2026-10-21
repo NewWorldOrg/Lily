@@ -24,7 +24,7 @@ enum BotCommand: string implements BaseEnum
                 self::MEDICATION => new RawString('のんだ'),
                 self::INIT_SLASH_COMMANDS => 'initSlashCommands',
             };
-        } catch ( \UnhandledMatchError) {
+        } catch (\UnhandledMatchError) {
             return new RawString('実装されていないコマンドです');
         }
     }
@@ -44,8 +44,8 @@ enum BotCommand: string implements BaseEnum
         };
     }
 
-    public function getCommandArgumentClass(array $commandArgs)
-    : RegisterDrugCommandArgument|MedicationCommandArgument|null {
+    public function getCommandArgumentClass(array $commandArgs): RegisterDrugCommandArgument|MedicationCommandArgument|null
+    {
         return match ($this) {
             self::REGISTER_DRUG => new RegisterDrugCommandArgument($commandArgs),
             self::MEDICATION => new MedicationCommandArgument($commandArgs),

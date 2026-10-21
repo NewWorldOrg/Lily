@@ -2,7 +2,6 @@
 
 namespace Domain\Base;
 
-
 use Courage\CoInt\CoInteger;
 use Domain\Exception\InvalidArgumentException;
 

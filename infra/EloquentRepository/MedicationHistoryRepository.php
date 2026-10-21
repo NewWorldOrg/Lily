@@ -40,13 +40,13 @@ class MedicationHistoryRepository implements MedicationHistoryRepositoryInterfac
     public function getPaginator(Paginate $paginate): MedicationHistoryList
     {
         $builder = MedicationHistoryModel::with(self::WITH_MODEL)
-            ->orderBy('id', OrderKey::DESC->getValue()->getRawValue())
+            ->orderByDesc('id')
             ->limit($paginate->getLimit()->getRawValue())
             ->offset($paginate->offset()->getRawValue());
 
         $collection = $builder->get();
 
-        return new MedicationHistoryList($collection->map(function(MedicationHistoryModel $model) {
+        return new MedicationHistoryList($collection->map(function (MedicationHistoryModel $model) {
             return $model->toDomain();
         })->toArray());
     }
@@ -55,13 +55,13 @@ class MedicationHistoryRepository implements MedicationHistoryRepositoryInterfac
     {
         $builder = MedicationHistoryModel::with(self::WITH_MODEL)
             ->where(['user_id' => $userId->getRawValue()])
-            ->orderBy('id', OrderKey::DESC->getValue()->getRawValue())
+            ->orderByDesc('id')
             ->limit($paginate->getLimit()->getRawValue())
             ->offset($paginate->offset()->getRawValue());
 
         $collection = $builder->get();
 
-        return new MedicationHistoryList($collection->map(function(MedicationHistoryModel $model) {
+        return new MedicationHistoryList($collection->map(function (MedicationHistoryModel $model) {
             return $model->toDomain();
         })->toArray());
     }
