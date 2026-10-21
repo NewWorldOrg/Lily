@@ -1052,26 +1052,26 @@
         },
         {
             "name": "fyui001/courage",
-            "version": "v2.0.4",
+            "version": "v2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tkdyuk/courage.git",
-                "reference": "8b2f72631f7cb5e6ba5940201770de7554a80c82"
+                "reference": "fc8a22201c4ee05bf6051f2d61c8be412de98f96"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tkdyuk/courage/zipball/8b2f72631f7cb5e6ba5940201770de7554a80c82",
-                "reference": "8b2f72631f7cb5e6ba5940201770de7554a80c82",
+                "url": "https://api.github.com/repos/tkdyuk/courage/zipball/fc8a22201c4ee05bf6051f2d61c8be412de98f96",
+                "reference": "fc8a22201c4ee05bf6051f2d61c8be412de98f96",
                 "shasum": ""
             },
             "require": {
                 "ext-mbstring": "*",
-                "league/climate": "^3.7",
-                "php": ">=8.3",
-                "phpstan/phpstan": "^2.1"
+                "league/climate": "^3.12",
+                "php": ">=8.4"
             },
             "require-dev": {
-                "phpunit/phpunit": "^9.5.11"
+                "phpstan/phpstan": "^2.3",
+                "phpunit/phpunit": "^13.4"
             },
             "type": "library",
             "autoload": {
@@ -1096,9 +1096,9 @@
             ],
             "support": {
                 "issues": "https://github.com/tkdyuk/courage/issues",
-                "source": "https://github.com/tkdyuk/courage/tree/v2.0.4"
+                "source": "https://github.com/tkdyuk/courage/tree/v2.1.0"
             },
-            "time": "2025-06-19T12:43:16+00:00"
+            "time": "2026-10-21T19:03:28+00:00"
         },
         {
             "name": "graham-campbell/result-type",
@@ -3505,70 +3505,6 @@
                 "source": "https://github.com/phpstan/phpdoc-parser/tree/2.3.6"
             },
             "time": "2026-09-27T20:07:45+00:00"
-        },
-        {
-            "name": "phpstan/phpstan",
-            "version": "2.3.1",
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/6155239b488e95d26d1ebd95c6b4bb294d7f09db",
-                "reference": "6155239b488e95d26d1ebd95c6b4bb294d7f09db",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.4|^8.0"
-            },
-            "conflict": {
-                "phpstan/phpstan-shim": "*"
-            },
-            "bin": [
-                "phpstan",
-                "phpstan.phar"
-            ],
-            "type": "library",
-            "autoload": {
-                "files": [
-                    "bootstrap.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Ondřej Mirtes"
-                },
-                {
-                    "name": "Markus Staab"
-                },
-                {
-                    "name": "Vincent Langlet"
-                }
-            ],
-            "description": "PHPStan - PHP Static Analysis Tool",
-            "keywords": [
-                "dev",
-                "static analysis"
-            ],
-            "support": {
-                "docs": "https://phpstan.org/user-guide/getting-started",
-                "forum": "https://github.com/phpstan/phpstan/discussions",
-                "issues": "https://github.com/phpstan/phpstan/issues",
-                "security": "https://github.com/phpstan/phpstan/security/policy",
-                "source": "https://github.com/phpstan/phpstan-src"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/ondrejmirtes",
-                    "type": "github"
-                },
-                {
-                    "url": "https://github.com/phpstan",
-                    "type": "github"
-                }
-            ],
-            "time": "2026-10-08T21:09:11+00:00"
         },
         {
             "name": "psr/clock",
@@ -10136,6 +10072,70 @@
                 "source": "https://github.com/phar-io/version/tree/3.2.1"
             },
             "time": "2022-02-21T01:04:05+00:00"
+        },
+        {
+            "name": "phpstan/phpstan",
+            "version": "2.3.1",
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/6155239b488e95d26d1ebd95c6b4bb294d7f09db",
+                "reference": "6155239b488e95d26d1ebd95c6b4bb294d7f09db",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.4|^8.0"
+            },
+            "conflict": {
+                "phpstan/phpstan-shim": "*"
+            },
+            "bin": [
+                "phpstan",
+                "phpstan.phar"
+            ],
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "bootstrap.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ondřej Mirtes"
+                },
+                {
+                    "name": "Markus Staab"
+                },
+                {
+                    "name": "Vincent Langlet"
+                }
+            ],
+            "description": "PHPStan - PHP Static Analysis Tool",
+            "keywords": [
+                "dev",
+                "static analysis"
+            ],
+            "support": {
+                "docs": "https://phpstan.org/user-guide/getting-started",
+                "forum": "https://github.com/phpstan/phpstan/discussions",
+                "issues": "https://github.com/phpstan/phpstan/issues",
+                "security": "https://github.com/phpstan/phpstan/security/policy",
+                "source": "https://github.com/phpstan/phpstan-src"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/ondrejmirtes",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/phpstan",
+                    "type": "github"
+                }
+            ],
+            "time": "2026-10-08T21:09:11+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
