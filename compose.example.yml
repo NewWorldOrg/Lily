@@ -15,7 +15,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.lily.rule=Host(`lily.localhost`)"
   js:
-    image: node:22.11.0-slim
+    image: node:22.23.4-slim
     working_dir: /code
     command: ["sh", "-c", "yarn && yarn dev"]
     volumes:
