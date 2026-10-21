@@ -12,7 +12,7 @@ class BaseTimeTest extends TestCase
 {
     public function testConstruct()
     {
-        $baseTimeInstance = new class(time()) extends BaseTime {};
+        $baseTimeInstance = new class (time()) extends BaseTime {};
         $this->assertInstanceOf(BaseTime::class, $baseTimeInstance);
     }
 
@@ -32,7 +32,7 @@ class BaseTimeTest extends TestCase
 
     public function testGetDisplay()
     {
-        $time = new class(strtotime('1993-03-16')) extends BaseTime {};
+        $time = new class (strtotime('1993-03-16')) extends BaseTime {};
         $this->assertEquals(
             '1993/03/16',
             $time->getDisplay(),
@@ -41,7 +41,7 @@ class BaseTimeTest extends TestCase
 
     public function testGetDetail()
     {
-        $time = new class(strtotime('1993-03-16')) extends BaseTime {};
+        $time = new class (strtotime('1993-03-16')) extends BaseTime {};
         $this->assertEquals(
             '1993/03/16 00:00:00',
             $time->getDetail(),
@@ -50,7 +50,7 @@ class BaseTimeTest extends TestCase
 
     public function testGetSqlDate()
     {
-        $time = new class(strtotime('1993/03/16')) extends BaseTime {};
+        $time = new class (strtotime('1993/03/16')) extends BaseTime {};
         $this->assertEquals(
             '1993-03-16',
             $time->getSqlDate(),
@@ -59,7 +59,7 @@ class BaseTimeTest extends TestCase
 
     public function testGetSqlTimeStamp()
     {
-        $time = new class(strtotime('1993/03/16')) extends BaseTime {};
+        $time = new class (strtotime('1993/03/16')) extends BaseTime {};
         $this->assertEquals(
             '1993-03-16 00:00:00',
             $time->getSqlTimeStamp(),

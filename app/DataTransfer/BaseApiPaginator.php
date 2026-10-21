@@ -8,7 +8,6 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use OpenApi\Attributes\Property;
 use OpenApi\Attributes\Schema;
 
-
 #[Schema(
     schema: 'base_api_paginator',
     properties: [

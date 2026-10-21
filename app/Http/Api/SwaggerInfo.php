@@ -12,4 +12,5 @@ use OpenApi\Attributes\Info;
     title: 'Lily api v1',
 )]
 class SwaggerInfo
-{}
+{
+}

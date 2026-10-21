@@ -44,7 +44,6 @@ class FeatureTestCase extends TestCase
         $admin = new AdminUser(
             $this->adminUserRepository->getByUserId(
                 new AdminUserId('takada_yuki')
-
             )
         );
 

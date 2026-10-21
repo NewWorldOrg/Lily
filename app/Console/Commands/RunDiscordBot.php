@@ -7,7 +7,6 @@ use Infra\Discord\DiscordBotClient;
 
 class RunDiscordBot extends Command
 {
-
     protected DiscordBotClient $botClient;
 
     /**

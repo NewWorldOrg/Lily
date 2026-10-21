@@ -29,7 +29,7 @@ class DiscordBotCommandSystem
     private RawString $wikiViewPageUrl;
     private MessageSender $messageSender;
 
-    public function __construct (
+    public function __construct(
         private DrugRepository $drugRepository,
         private MedicationHistoryDomainService $medicationHistoryDomainService,
     ) {

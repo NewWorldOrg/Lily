@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Builder;
 
 abstract class Model extends EloquentModel
 {
-
     public function scopeWhereLike(
         Builder $query,
         string $attribute,

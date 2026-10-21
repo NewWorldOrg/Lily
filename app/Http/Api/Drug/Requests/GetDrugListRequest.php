@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Api\Drug\Requests;
 
-
 use App\Http\Api\Shered\Request\ApiRequest;
 
 class GetDrugListRequest extends ApiRequest

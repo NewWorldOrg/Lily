@@ -55,7 +55,7 @@ class ServiceResult
         return new ServiceResult(true, null, $data);
     }
 
-    public static function fail(ServiceError $error ): ServiceResult
+    public static function fail(ServiceError $error): ServiceResult
     {
         return new ServiceResult(false, $error, null);
     }

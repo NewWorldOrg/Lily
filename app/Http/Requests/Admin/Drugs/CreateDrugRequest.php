@@ -9,10 +9,8 @@ use App\Http\Requests\Request as AppRequest;
 use Domain\Drug\DrugName;
 use Domain\Drug\DrugUrl;
 
-
 class CreateDrugRequest extends AppRequest
 {
-
     /**
      * check authorize
      * @return bool

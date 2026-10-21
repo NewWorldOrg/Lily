@@ -14,7 +14,6 @@ use Infra\EloquentModels\AdminUser;
 
 class AdminUserController extends AppController
 {
-
     public function __construct(private readonly AdminUserService $adminUserService)
     {
         parent::__construct();
@@ -55,7 +54,6 @@ class AdminUserController extends AppController
             $request->getName(),
             $request->getRole(),
             $request->getStatus(),
-
         );
         return redirect(route('admin.admin_users.index'))->with('success', 'ユーザーを保存しました');
     }

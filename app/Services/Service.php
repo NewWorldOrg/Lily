@@ -10,5 +10,4 @@ namespace App\Services;
  */
 class Service
 {
-
 }

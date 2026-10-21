@@ -8,7 +8,6 @@ use Domain\Common\HashedPassword;
 
 class AdminUser
 {
-
     public function __construct(
         private AdminId $adminId,
         private AdminUserId $adminUserId,
