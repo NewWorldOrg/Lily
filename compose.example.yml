@@ -28,7 +28,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.lily-hmr.rule=Host(`hmr.lily.localhost`)"
   db:
-    image: mysql:9.1.0
+    image: mysql:9.7.2
     volumes:
       - db-store:/var/lib/mysql
       - ./docker/db/init.sql:/docker-entrypoint-initdb.d/0.sql
