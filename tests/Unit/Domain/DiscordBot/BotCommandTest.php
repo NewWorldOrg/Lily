@@ -8,6 +8,7 @@ use Domain\Common\RawString;
 use Domain\DiscordBot\BotCommand;
 use Domain\Exception\InvalidArgumentException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class BotCommandTest extends TestCase
@@ -19,10 +20,7 @@ class BotCommandTest extends TestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider displayNameProvider
-     * @return void
-     */
+    #[DataProvider('displayNameProvider')]
     public function testDisplayName(RawString $displayName, BotCommand $command)
     {
         $this->assertEquals(
@@ -31,7 +29,7 @@ class BotCommandTest extends TestCase
         );
     }
 
-    public static function displayNameProvider() :array
+    public static function displayNameProvider(): array
     {
         return [
             'registerDrug' => [
@@ -45,10 +43,7 @@ class BotCommandTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider makeFromDisplayNameProvider
-     * @return void
-     */
+    #[DataProvider('makeFromDisplayNameProvider')]
     public function testMakeFromDisplayName(string $displayName, BotCommand $command)
     {
         $this->assertEquals(

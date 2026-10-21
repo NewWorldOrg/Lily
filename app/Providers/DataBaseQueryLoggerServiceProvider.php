@@ -31,7 +31,7 @@ class DataBaseQueryLoggerServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        if (in_array($this->app->environment(),['local', 'testing']) || $this->app->runningInConsole()) {
+        if (in_array($this->app->environment(), ['local', 'testing']) || $this->app->runningInConsole()) {
             return;
         }
 
@@ -61,7 +61,7 @@ class DataBaseQueryLoggerServiceProvider extends ServiceProvider
                 } elseif ($binding instanceof DateTime) {
                     $binding = "'{$binding->setTimezone(new DateTimeZone(config('app.timezone')))->format('Y-m-d H:i:s')}'";
                 }
-                $sql = preg_replace('/\\?/', $binding, $sql, 1);
+                $sql = preg_replace('/\\?/', $binding, $sql, 1) ?? $sql;
             }
             Log::info($sql);
             Log::channel($logChannel)->info('[ROUTE]' . $route);

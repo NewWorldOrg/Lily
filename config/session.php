@@ -202,4 +202,16 @@ return [
 
     'same_site' => null,
 
+    /*
+    |--------------------------------------------------------------------------
+    | Session Serialization
+    |--------------------------------------------------------------------------
+    |
+    | Session data is stored as JSON, so no PHP object is unserialized from
+    | the session store.
+    |
+    */
+
+    'serialization' => 'json',
+
 ];

@@ -13,7 +13,7 @@ use Domain\Message\MessageRepository;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Infra\Discord\MessageBackfill;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use React\Promise\PromiseInterface;
 use Tests\DbIntegration\DbIntegrationTestCase;
 
@@ -22,7 +22,7 @@ use function React\Promise\resolve;
 
 class MessageBackfillTest extends DbIntegrationTestCase
 {
-    private Discord&MockObject $discord;
+    private Discord&Stub $discord;
 
     /**
      * @var array<string, Channel>
@@ -38,7 +38,7 @@ class MessageBackfillTest extends DbIntegrationTestCase
     {
         parent::setUp();
 
-        $this->discord = $this->createMock(Discord::class);
+        $this->discord = $this->createStub(Discord::class);
         $this->discord->method('getChannel')->willReturnCallback(
             fn (string $id) => $this->discordChannels[$id] ?? null
         );
@@ -195,7 +195,7 @@ class MessageBackfillTest extends DbIntegrationTestCase
      */
     private function givenHistory(string $discordChannelId, array $pages): void
     {
-        $channel = $this->createMock(Channel::class);
+        $channel = $this->createStub(Channel::class);
         $channel->method('getMessageHistory')->willReturnCallback(
             function (array $options) use ($discordChannelId, &$pages): PromiseInterface {
                 $this->requestedOptions[$discordChannelId][] = $options;

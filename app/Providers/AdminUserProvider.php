@@ -22,7 +22,7 @@ class AdminUserProvider implements UserProvider
     ) {
     }
 
-    public function retrieveByCredentials(array $credentials): Adminuser | null
+    public function retrieveByCredentials(array $credentials): AdminUser|null
     {
         if (!isset($credentials['user_id'])) {
             return null;
