@@ -71,7 +71,7 @@ task test_seed
 
 ## 技術スタック
 
-- PHP 8.4 / Laravel 13
+- PHP 8.5 / Laravel 13
 - MySQL 9.7
 - Vite 8 / jQuery 3.7
 - Docker (PHP Unit server, MySQL, Node 22)

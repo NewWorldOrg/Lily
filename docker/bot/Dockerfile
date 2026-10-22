@@ -7,7 +7,7 @@ COPY composer.json composer.lock /code/
 # install deps(without generating autoloader)
 RUN composer install --no-scripts --no-autoloader --ignore-platform-reqs
 
-FROM php:8.4.27-bookworm
+FROM php:8.5.12-bookworm
 
 COPY --from=composer-cache /usr/bin/composer /usr/bin/composer
 
@@ -28,7 +28,8 @@ RUN apt update && \
     libonig-dev \
     default-mysql-client
 
-RUN docker-php-ext-install bcmath intl pdo_mysql opcache bcmath
+# opcache is compiled into PHP 8.5 and already enabled, so it is no longer installed as a shared extension
+RUN docker-php-ext-install bcmath intl pdo_mysql
 
 RUN apt-get clean && \
     rm -rf /var/lib/apt/lists/*

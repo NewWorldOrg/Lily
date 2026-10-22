@@ -1,7 +1,7 @@
 FROM composer:2.10.3 AS composer-base
 
-## NGINX Unit 1.35.0 built from source on the PHP 8.4.27 image
-FROM php:8.4.27-cli-bookworm AS unit
+## NGINX Unit 1.35.0 built from source on the PHP 8.5.12 image
+FROM php:8.5.12-cli-bookworm AS unit
 
 RUN set -ex \
     && apt-get update \
@@ -32,14 +32,15 @@ RUN set -ex \
     && make -j $NCPU unitd \
     && install -pm755 build/sbin/unitd /usr/sbin/unitd \
     && make clean \
-    && ./configure $CONFIGURE_ARGS_MODULES --cc-opt="$CC_OPT" --modulesdir=/usr/lib/unit/modules \
+    # PHP 8.5 added pre_request_init to sapi_module_struct; Unit 1.35.0 (archived upstream) leaves it unset, which is NULL and correct, so stop -Werror failing on the missing initializer
+    && ./configure $CONFIGURE_ARGS_MODULES --cc-opt="$CC_OPT -Wno-error=missing-field-initializers" --modulesdir=/usr/lib/unit/modules \
     && ./configure php \
     && make -j $NCPU php-install \
     && cd / \
     && rm -rf /usr/src/unit
 
-## base: PHP 8.4.27 + Unit + extensions
-FROM php:8.4.27-cli-bookworm AS base
+## base: PHP 8.5.12 + Unit + extensions
+FROM php:8.5.12-cli-bookworm AS base
 
 COPY --from=composer-base /usr/bin/composer /usr/bin/composer
 COPY --from=unit /usr/sbin/unitd /usr/sbin/unitd
@@ -72,8 +73,9 @@ WORKDIR /code
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 COPY docker/unit/zz-custom.ini /usr/local/etc/php/conf.d/
 
+# opcache is compiled into PHP 8.5 and already enabled, so it is no longer installed as a shared extension
 RUN export MAKEFLAGS="-j$(nproc)" && \
-    docker-php-ext-install -j$(nproc) bcmath intl pdo_mysql opcache
+    docker-php-ext-install -j$(nproc) bcmath intl pdo_mysql
 
 COPY docker/unit/config.json /docker-entrypoint.d/
 
