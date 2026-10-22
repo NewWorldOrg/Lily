@@ -4,7 +4,6 @@
 
 ## 前提条件
 
-- [docker-toolchains](https://github.com/NewWorldOrg/docker-toolchains) が稼働していること
 - [Task](https://taskfile.dev/) がインストールされていること
 
 ## セットアップ
