@@ -74,5 +74,5 @@ task test_seed
 - PHP 8.5 / Laravel 13
 - MySQL 9.7
 - Vite 8 / jQuery 3.7
-- Docker (PHP Unit server, MySQL, Node 22)
+- Docker (FrankenPHP, MySQL, Node 22)
 - Traefik (リバースプロキシ)

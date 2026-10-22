@@ -10,7 +10,7 @@ services:
       - docker_default
     volumes:
       - .:/code
-      - ./docker/unit/zz-custom.ini:/usr/local/etc/php/zz-custom.ini
+      - ./docker/php/zz-custom.ini:/usr/local/etc/php/conf.d/zz-custom.ini
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.lily.rule=Host(`lily.localhost`)"
